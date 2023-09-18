@@ -1,0 +1,1 @@
+This first release includes basic start up features such as copying, and a popup menu. Future releases may include being able to generate multiple lists, and being able to use other languages.
