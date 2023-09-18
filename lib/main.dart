@@ -861,89 +861,99 @@ class GeneratorPage extends StatelessWidget {
               ),
             ),
             Expanded(
-                child: SizedBox(
-              width: double.infinity,
-              child: Expanded(
+              child: SizedBox(
+                width: double.infinity,
                 child: ListView(children: <Widget>[
                   for (var i = 0; i < appState.words.length; i++)
-                    Flexible(
-                      child: Card(
-                        color: theme.colorScheme.surface, // ← And also this.
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * .06,
-                              child: Align(
-                                alignment: Alignment.centerRight,
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(0, 0, 5, 0),
-                                  child: Text("${i + 1})",
+                    Flex(
+                      direction: Axis.horizontal,
+                      children: [
+                        Flexible(
+                          flex: 1,
+                          child: Card(
+                            color:
+                                theme.colorScheme.surface, // ← And also this.
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * .06,
+                                  child: Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Padding(
+                                      padding:
+                                          const EdgeInsets.fromLTRB(0, 0, 5, 0),
+                                      child: Text("${i + 1})",
+                                          softWrap: true,
+                                          style: TextStyle(fontSize: 12.0)),
+                                    ),
+                                  ),
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    // Handle the click action here
+                                    // For example, you can navigate to a new screen or perform some other action.
+                                    print(
+                                        "Copy word, '${appState.words[i][0]}' clicked!");
+                                    Clipboard.setData(ClipboardData(
+                                        text: appState.words[i][0]));
+                                  },
+                                  child: SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width * .15,
+                                    child: Text(appState.words[i][0],
+                                        softWrap: true,
+                                        style: TextStyle(fontSize: 12.0)),
+                                  ),
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    // Handle the click action here
+                                    // For example, you can navigate to a new screen or perform some other action.
+                                    print(
+                                        "Copy formatted word, '${appState.words[i][1]}' clicked!");
+                                    Clipboard.setData(ClipboardData(
+                                        text: appState.words[i][1]));
+                                  },
+                                  child: SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width * .15,
+                                    child: Text(
+                                      "( ${appState.words[i][1]} )",
                                       softWrap: true,
-                                      style: TextStyle(fontSize: 12.0)),
+                                      style: TextStyle(fontSize: 10.0),
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                            InkWell(
-                              onTap: () {
-                                // Handle the click action here
-                                // For example, you can navigate to a new screen or perform some other action.
-                                print(
-                                    "Copy word, '${appState.words[i][0]}' clicked!");
-                                Clipboard.setData(
-                                    ClipboardData(text: appState.words[i][0]));
-                              },
-                              child: SizedBox(
-                                width: MediaQuery.of(context).size.width * .15,
-                                child: Text(appState.words[i][0],
-                                    softWrap: true,
-                                    style: TextStyle(fontSize: 12.0)),
-                              ),
-                            ),
-                            InkWell(
-                              onTap: () {
-                                // Handle the click action here
-                                // For example, you can navigate to a new screen or perform some other action.
-                                print(
-                                    "Copy formatted word, '${appState.words[i][1]}' clicked!");
-                                Clipboard.setData(
-                                    ClipboardData(text: appState.words[i][1]));
-                              },
-                              child: SizedBox(
-                                width: MediaQuery.of(context).size.width * .15,
-                                child: Text(
-                                  "( ${appState.words[i][1]} )",
-                                  softWrap: true,
-                                  style: TextStyle(fontSize: 10.0),
+                                InkWell(
+                                  onTap: () {
+                                    // Handle the click action here
+                                    // For example, you can navigate to a new screen or perform some other action.
+                                    print(
+                                        "Definition for '${appState.words[i][0]}', copy '${appState.words[i][2]}'' clicked!");
+                                    Clipboard.setData(ClipboardData(
+                                        text: appState.words[i][2]));
+                                  },
+                                  child: SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width * .56,
+                                    child: Text(
+                                      appState.words[i][2],
+                                      softWrap: true,
+                                      style: TextStyle(fontSize: 12.0),
+                                    ),
+                                  ),
                                 ),
-                              ),
+                              ],
                             ),
-                            InkWell(
-                              onTap: () {
-                                // Handle the click action here
-                                // For example, you can navigate to a new screen or perform some other action.
-                                print(
-                                    "Definition for '${appState.words[i][0]}', copy '${appState.words[i][2]}'' clicked!");
-                                Clipboard.setData(
-                                    ClipboardData(text: appState.words[i][2]));
-                              },
-                              child: SizedBox(
-                                width: MediaQuery.of(context).size.width * .56,
-                                child: Text(
-                                  appState.words[i][2],
-                                  softWrap: true,
-                                  style: TextStyle(fontSize: 12.0),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                          ),
+                        )
+                      ],
                     ),
                 ]),
               ),
-            ))
+            )
           ],
         ),
       ),
