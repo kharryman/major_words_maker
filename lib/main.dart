@@ -17,10 +17,11 @@ import 'package:provider/provider.dart';
 
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 //import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:device_info/device_info.dart';
+//import 'package:device_info/device_info.dart';
 
 const String testDevice = '974550CBC7D4EA4718A67165E2E3B868';
 const String myIpad = '00008020-0014301102D1002E';
+const String myIphone11 = 'A8EC231A-DCFC-405C-8A0D-62E9F5BA1918';
 const int maxFailedLoadAttempts = 3;
 InterstitialAd? interstitialAd;
 int numInterstitialLoadAttempts = 0;
@@ -44,7 +45,7 @@ Future<void> main() async {
     if (Platform.isAndroid) {
       testDevices = [testDevice];
     } else if (Platform.isIOS) {
-      testDevices = [myIpad];
+      testDevices = [myIpad, myIphone11];
     }
     MobileAds.instance
       ..initialize()
@@ -54,27 +55,27 @@ Future<void> main() async {
   } else {
     print("main NOT SHOWING AD");
   }
-  String deviceId = await getDeviceId();
-  print('Device ID: $deviceId');
+  //String deviceId = await getDeviceId();
+  //print('Device ID: $deviceId');
   runApp(MyApp());
 }
 
-Future<String> getDeviceId() async {
-  final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
-  String deviceId = '';
+//Future<String> getDeviceId() async {
+//  final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
+//  String deviceId = '';
+//
+//  if (defaultTargetPlatform == TargetPlatform.iOS) {
+//    try {
+// ignore: unnecessary_nullable_for_final_variable_declarations
+//      final info = await deviceInfoPlugin.iosInfo;
+//      deviceId = info.identifierForVendor; // This is the iOS device ID
+//   } catch (e) {
+//     print('Error obtaining device ID: $e');
+//   }
+// }
 
-  if (defaultTargetPlatform == TargetPlatform.iOS) {
-    try {
-      // ignore: unnecessary_nullable_for_final_variable_declarations
-      final info = await deviceInfoPlugin.iosInfo;
-      deviceId = info.identifierForVendor; // This is the iOS device ID
-    } catch (e) {
-      print('Error obtaining device ID: $e');
-    }
-  }
-
-  return deviceId;
-}
+// return deviceId;
+//}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -444,9 +445,9 @@ class _MyHomePageState extends State<MyHomePage> {
     //setState(() {
     //  isMakeMajor = false;
     //});
-    var appId = (Platform.isAndroid || (Platform.isIOS && kDebugMode == false))
+    var appId = Platform.isAndroid
         ? 'ca-app-pub-8514966468184377/6907461840'
-        : 'ca-app-pub-3940256099942544/4411468910';
+        : 'ca-app-pub-8514966468184377/5883541243';
     print("Using appId: $appId kDebugMode = $kDebugMode");
     InterstitialAd.load(
         adUnitId: appId,
@@ -608,12 +609,14 @@ class GeneratorPage extends StatelessWidget {
               ),
               icon: Icon(Icons.menu),
               onSelected: (value) {
-                focusNode.unfocus();
+                //focusNode.unfocus();
+                FocusScope.of(context).unfocus();
                 if (kIsWeb == false) {
                   Random random = Random();
                   var isShowAd = random.nextInt(1000) >= 500; //EXACTLY HALF.
                   if (isShowAd) {
-                    print("makeMajor showInterstitialAd CALLING...");
+                    print(
+                        "Selected Menu makeMajor showInterstitialAd CALLING...");
                     _MyHomePageState().showInterstitialAd();
                   }
                 } else {
