@@ -1,3 +1,5 @@
+CALL flutter clean
+CALL flutter pub get
 CALL copy /y ..\major_maker_key.properties .\android
 CALL copy /y ..\lfq.keystore .\android\app
 CALL del /q /S ".\build\app\outputs\bundle\release\app-release.aab"
