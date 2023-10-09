@@ -5,7 +5,7 @@ import 'dart:io';
 import 'dart:math';
 
 //kIsWeb : SIMILIAR TO NOT isApp() FUNCTION====>
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/foundation.dart';
 
 //import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
@@ -17,8 +17,11 @@ import 'package:provider/provider.dart';
 
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 //import 'package:flutter_native_splash/flutter_native_splash.dart';
+//import 'package:device_info/device_info.dart';
 
 const String testDevice = '974550CBC7D4EA4718A67165E2E3B868';
+const String myIpad = '00008020-0014301102D1002E';
+const String myIphone11 = 'A8EC231A-DCFC-405C-8A0D-62E9F5BA1918';
 const int maxFailedLoadAttempts = 3;
 InterstitialAd? interstitialAd;
 int numInterstitialLoadAttempts = 0;
@@ -34,21 +37,45 @@ class MajorWord {
   MajorWord(this.name, this.number, this.definition);
 }
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   print("main RETURNING $kIsWeb");
   if (kIsWeb == false) {
+    var testDevices = <String>[];
+    if (Platform.isAndroid) {
+      testDevices = [testDevice];
+    } else if (Platform.isIOS) {
+      testDevices = [myIpad, myIphone11];
+    }
     MobileAds.instance
       ..initialize()
       ..updateRequestConfiguration(RequestConfiguration(
-        testDeviceIds: <String>[testDevice],
+        testDeviceIds: testDevices,
       ));
   } else {
     print("main NOT SHOWING AD");
   }
-
+  //String deviceId = await getDeviceId();
+  //print('Device ID: $deviceId');
   runApp(MyApp());
 }
+
+//Future<String> getDeviceId() async {
+//  final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
+//  String deviceId = '';
+//
+//  if (defaultTargetPlatform == TargetPlatform.iOS) {
+//    try {
+// ignore: unnecessary_nullable_for_final_variable_declarations
+//      final info = await deviceInfoPlugin.iosInfo;
+//      deviceId = info.identifierForVendor; // This is the iOS device ID
+//   } catch (e) {
+//     print('Error obtaining device ID: $e');
+//   }
+// }
+
+// return deviceId;
+//}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -418,10 +445,12 @@ class _MyHomePageState extends State<MyHomePage> {
     //setState(() {
     //  isMakeMajor = false;
     //});
-
+    var appId = Platform.isAndroid
+        ? 'ca-app-pub-8514966468184377/6907461840'
+        : 'ca-app-pub-8514966468184377/5883541243';
+    print("Using appId: $appId kDebugMode = $kDebugMode");
     InterstitialAd.load(
-        adUnitId:
-            Platform.isAndroid ? 'ca-app-pub-8514966468184377/6907461840' : '',
+        adUnitId: appId,
         request: request,
         adLoadCallback: InterstitialAdLoadCallback(
           onAdLoaded: (InterstitialAd ad) {
@@ -579,7 +608,21 @@ class GeneratorPage extends StatelessWidget {
                 maxWidth: MediaQuery.of(context).size.width,
               ),
               icon: Icon(Icons.menu),
-              onSelected: (value) {},
+              onSelected: (value) {
+                //focusNode.unfocus();
+                FocusScope.of(context).unfocus();
+                if (kIsWeb == false) {
+                  Random random = Random();
+                  var isShowAd = random.nextInt(1000) >= 500; //EXACTLY HALF.
+                  if (isShowAd) {
+                    print(
+                        "Selected Menu makeMajor showInterstitialAd CALLING...");
+                    _MyHomePageState().showInterstitialAd();
+                  }
+                } else {
+                  print("NOT SHOWING AD");
+                }
+              },
               itemBuilder: (BuildContext context) {
                 return [
                   PopupMenuItem<String>(
@@ -608,7 +651,7 @@ class GeneratorPage extends StatelessWidget {
                                   ),
                                   Expanded(
                                     flex: 11,
-                                    child: Text('z starts with "ero"',
+                                    child: Text('z starts with "zero"',
                                         textAlign: TextAlign.left),
                                   ),
                                 ],
@@ -827,7 +870,6 @@ class GeneratorPage extends StatelessWidget {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
               child: TextField(
-                  focusNode: focusNode,
                   controller: appState.numberController,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
@@ -838,16 +880,28 @@ class GeneratorPage extends StatelessWidget {
                     FilteringTextInputFormatter.digitsOnly
                   ], // Only numbers can be entered
                   onEditingComplete: () {
+                    //if (Platform.isAndroid) {
+                    //  focusNode.unfocus();
+                    //} else if (Platform.isIOS) {
+                    FocusScope.of(context).unfocus();
+                    //}
                     appState.makeMajorWords(context);
-                    focusNode.unfocus();
                   }),
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
               child: ElevatedButton(
-                onPressed: () {
-                  appState.makeMajorWords(context);
+                onPressed: () async {
+                  //if (Platform.isAndroid) {
                   focusNode.unfocus();
+                  //} else if (Platform.isIOS) {
+                  FocusScope.of(context).unfocus();
+                  //}
+                  //await Future.delayed(Duration(seconds: 1), () {
+                  // Code to be executed after the delay
+                  print("Delayed action executed!");
+                  appState.makeMajorWords(context);
+                  //});
                 },
                 child: Text('Make Major Words'),
               ),
@@ -861,97 +915,109 @@ class GeneratorPage extends StatelessWidget {
               ),
             ),
             Expanded(
-              child: SizedBox(
-                width: double.infinity,
-                child: ListView(children: <Widget>[
-                  for (var i = 0; i < appState.words.length; i++)
-                    Flex(
-                      direction: Axis.horizontal,
-                      children: [
-                        Flexible(
-                          flex: 1,
-                          child: Card(
-                            color:
-                                theme.colorScheme.surface, // ← And also this.
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                SizedBox(
-                                  width:
-                                      MediaQuery.of(context).size.width * .06,
-                                  child: Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Padding(
-                                      padding:
-                                          const EdgeInsets.fromLTRB(0, 0, 5, 0),
-                                      child: Text("${i + 1})",
+              child: GestureDetector(
+                onTap: () {
+                  print("BODY UNFOCUSSING");
+                  focusNode.unfocus();
+                },
+                child: SizedBox(
+                  width: double.infinity,
+                  child: ListView(children: <Widget>[
+                    for (var i = 0; i < appState.words.length; i++)
+                      Flex(
+                        direction: Axis.horizontal,
+                        children: [
+                          Flexible(
+                            flex: 1,
+                            child: Card(
+                              color:
+                                  theme.colorScheme.surface, // ← And also this.
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width * .06,
+                                    child: Align(
+                                      alignment: Alignment.centerRight,
+                                      child: Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            0, 0, 5, 0),
+                                        child: Text("${i + 1})",
+                                            softWrap: true,
+                                            style: TextStyle(fontSize: 12.0)),
+                                      ),
+                                    ),
+                                  ),
+                                  InkWell(
+                                    onTap: () {
+                                      // Handle the click action here
+                                      // For example, you can navigate to a new screen or perform some other action.
+                                      print("BODY UNFOCUSSING");
+                                      focusNode.unfocus();
+                                      print(
+                                          "Copy word, '${appState.words[i][0]}' clicked!");
+                                      Clipboard.setData(ClipboardData(
+                                          text: appState.words[i][0]));
+                                    },
+                                    child: SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          .15,
+                                      child: Text(appState.words[i][0],
                                           softWrap: true,
                                           style: TextStyle(fontSize: 12.0)),
                                     ),
                                   ),
-                                ),
-                                InkWell(
-                                  onTap: () {
-                                    // Handle the click action here
-                                    // For example, you can navigate to a new screen or perform some other action.
-                                    print(
-                                        "Copy word, '${appState.words[i][0]}' clicked!");
-                                    Clipboard.setData(ClipboardData(
-                                        text: appState.words[i][0]));
-                                  },
-                                  child: SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width * .15,
-                                    child: Text(appState.words[i][0],
+                                  InkWell(
+                                    onTap: () {
+                                      // Handle the click action here
+                                      // For example, you can navigate to a new screen or perform some other action.
+                                      print("BODY UNFOCUSSING");
+                                      focusNode.unfocus();
+                                      print(
+                                          "Copy formatted word, '${appState.words[i][1]}' clicked!");
+                                      Clipboard.setData(ClipboardData(
+                                          text: appState.words[i][1]));
+                                    },
+                                    child: SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          .15,
+                                      child: Text(
+                                        "( ${appState.words[i][1]} )",
                                         softWrap: true,
-                                        style: TextStyle(fontSize: 12.0)),
-                                  ),
-                                ),
-                                InkWell(
-                                  onTap: () {
-                                    // Handle the click action here
-                                    // For example, you can navigate to a new screen or perform some other action.
-                                    print(
-                                        "Copy formatted word, '${appState.words[i][1]}' clicked!");
-                                    Clipboard.setData(ClipboardData(
-                                        text: appState.words[i][1]));
-                                  },
-                                  child: SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width * .15,
-                                    child: Text(
-                                      "( ${appState.words[i][1]} )",
-                                      softWrap: true,
-                                      style: TextStyle(fontSize: 10.0),
+                                        style: TextStyle(fontSize: 10.0),
+                                      ),
                                     ),
                                   ),
-                                ),
-                                InkWell(
-                                  onTap: () {
-                                    // Handle the click action here
-                                    // For example, you can navigate to a new screen or perform some other action.
-                                    print(
-                                        "Definition for '${appState.words[i][0]}', copy '${appState.words[i][2]}'' clicked!");
-                                    Clipboard.setData(ClipboardData(
-                                        text: appState.words[i][2]));
-                                  },
-                                  child: SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width * .56,
-                                    child: Text(
-                                      appState.words[i][2],
-                                      softWrap: true,
-                                      style: TextStyle(fontSize: 12.0),
+                                  InkWell(
+                                    onTap: () {
+                                      // Handle the click action here
+                                      // For example, you can navigate to a new screen or perform some other action.
+                                      print("BODY UNFOCUSSING");
+                                      focusNode.unfocus();
+                                      print(
+                                          "Definition for '${appState.words[i][0]}', copy '${appState.words[i][2]}'' clicked!");
+                                      Clipboard.setData(ClipboardData(
+                                          text: appState.words[i][2]));
+                                    },
+                                    child: SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          .56,
+                                      child: Text(
+                                        appState.words[i][2],
+                                        softWrap: true,
+                                        style: TextStyle(fontSize: 12.0),
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                        )
-                      ],
-                    ),
-                ]),
+                          )
+                        ],
+                      ),
+                  ]),
+                ),
               ),
             )
           ],
