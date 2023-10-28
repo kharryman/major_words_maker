@@ -10,12 +10,14 @@ import 'package:flutter/foundation.dart';
 //import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:major_words_maker/words.dart';
 //import 'package:list_major_english_words/list_major_english_words.dart';
 import 'major_english_words.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:url_launcher/url_launcher.dart';
 //import 'package:flutter_native_splash/flutter_native_splash.dart';
 //import 'package:device_info/device_info.dart';
 
@@ -60,25 +62,9 @@ Future<void> main() async {
   runApp(MyApp());
 }
 
-//Future<String> getDeviceId() async {
-//  final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
-//  String deviceId = '';
-//
-//  if (defaultTargetPlatform == TargetPlatform.iOS) {
-//    try {
-// ignore: unnecessary_nullable_for_final_variable_declarations
-//      final info = await deviceInfoPlugin.iosInfo;
-//      deviceId = info.identifierForVendor; // This is the iOS device ID
-//   } catch (e) {
-//     print('Error obtaining device ID: $e');
-//   }
-// }
-
-// return deviceId;
-//}
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+  final int ofThousandShowAd = 450;
 
   @override
   Widget build(BuildContext context) {
@@ -86,6 +72,7 @@ class MyApp extends StatelessWidget {
       create: (context) => MyAppState(),
       child: MaterialApp(
         title: 'Major Words Maker App',
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
           useMaterial3: true,
           colorScheme: ColorScheme.fromSeed(
@@ -152,7 +139,7 @@ class MyAppState extends ChangeNotifier {
       return;
     }
     isLoading = true;
-    showProgress(context);
+    //showProgress(context);
     print("list_english_words length = ${dicWords.length}");
     print("makeMajorWords called ");
     print(numberController.text);
@@ -178,15 +165,22 @@ class MyAppState extends ChangeNotifier {
     //print("WORDS FOUND= $words");
     //hideProgress(context);
     //isLoading = false;
+    var isShowAd = false;
     if (kIsWeb == false) {
       Random random = Random();
-      var isShowAd = random.nextInt(1000) >= 500; //EXACTLY HALF.
-      if (isShowAd) {
-        print("makeMajor showInterstitialAd CALLING...");
-        _MyHomePageState().showInterstitialAd();
-      }
+      isShowAd =
+          random.nextInt(1000) < MyApp().ofThousandShowAd; //EXACTLY HALF.
+    }
+    if (isShowAd) {
+      print("makeMajor showInterstitialAd CALLING...");
+      MyHomePageState().showInterstitialAd();
     } else {
       print("NOT SHOWING AD");
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  WordsPage(lastNumber: lastNumber, words: words)));
     }
     notifyListeners();
   }
@@ -412,10 +406,10 @@ class MyAppState extends ChangeNotifier {
 
 class MyHomePage extends StatefulWidget {
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<MyHomePage> createState() => MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class MyHomePageState extends State<MyHomePage> {
   var selectedIndex = 0; // ← Add this property.
   //bool isMakeMajor = false;
   bool isMakeMajor = true;
@@ -584,285 +578,283 @@ class CustomPopupMenuItem<T> extends PopupMenuItem<T> {
   //double get width => 100;
 }
 
+// ignore: must_be_immutable
+class MyPopup extends StatelessWidget {
+  String helpText =
+      '<strong style="font-style:italic;">The Major Sytem is a digit to consonant memory tool.<br />Each digit is represented by a set of similar sounding consonants.<br />It was designed by Stanislaus Mink von Wennsshein of 17th Century.<br />Here is the Major System:</strong><br />';
+  @override
+  Widget build(BuildContext context) {
+    return PopupMenuButton<String>(
+        constraints: BoxConstraints(
+          minWidth: 2.0 * 56.0,
+          maxWidth: MediaQuery.of(context).size.width,
+        ),
+        icon: Icon(Icons.menu),
+        onSelected: (value) {
+          //focusNode.unfocus();
+          FocusScope.of(context).unfocus();
+          if (kIsWeb == false) {
+            Random random = Random();
+            var isShowAd = random.nextInt(1000) < MyApp().ofThousandShowAd;
+            if (isShowAd) {
+              print("Selected Menu makeMajor showInterstitialAd CALLING...");
+              MyHomePageState().showInterstitialAd();
+            }
+          } else {
+            print("NOT SHOWING AD");
+          }
+        },
+        itemBuilder: (BuildContext context) {
+          return [
+            PopupMenuItem<String>(
+                value: 'Help',
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Html(data: helpText),
+                          Row(
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: Text('0',
+                                    textAlign: TextAlign.left,
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold)),
+                              ),
+                              Expanded(
+                                flex: 2,
+                                child: Text('s,z', textAlign: TextAlign.left),
+                              ),
+                              Expanded(
+                                flex: 11,
+                                child: Text('z starts with "zero"',
+                                    textAlign: TextAlign.left),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: Text('1',
+                                    textAlign: TextAlign.left,
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold)),
+                              ),
+                              Expanded(
+                                flex: 2,
+                                child:
+                                    Text('d,t,th', textAlign: TextAlign.left),
+                              ),
+                              Expanded(
+                                flex: 11,
+                                child: Text(
+                                    't is for "ten" th is for "THe one"',
+                                    textAlign: TextAlign.left),
+                              )
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: Text('2',
+                                    textAlign: TextAlign.left,
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold)),
+                              ),
+                              Expanded(
+                                flex: 2,
+                                child: Text('n', textAlign: TextAlign.left),
+                              ),
+                              Expanded(
+                                flex: 11,
+                                child: Text('"n" has two lines going down',
+                                    textAlign: TextAlign.left),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: Text('3',
+                                    textAlign: TextAlign.left,
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold)),
+                              ),
+                              Expanded(
+                                flex: 2,
+                                child: Text('m', textAlign: TextAlign.left),
+                              ),
+                              Expanded(
+                                flex: 11,
+                                child: Text('"m" has three lines going down',
+                                    textAlign: TextAlign.left),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: Text('4',
+                                    textAlign: TextAlign.left,
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold)),
+                              ),
+                              Expanded(
+                                flex: 2,
+                                child: Text('r', textAlign: TextAlign.left),
+                              ),
+                              Expanded(
+                                flex: 11,
+                                child: Text('r is last letter of "four"',
+                                    textAlign: TextAlign.left),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: Text('5',
+                                    textAlign: TextAlign.left,
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold)),
+                              ),
+                              Expanded(
+                                flex: 2,
+                                child: Text('l', textAlign: TextAlign.left),
+                              ),
+                              Expanded(
+                                flex: 11,
+                                child: Text(
+                                    'l is half or 50% of a box(2 Ls put together)',
+                                    textAlign: TextAlign.left),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: Text('6',
+                                    textAlign: TextAlign.left,
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold)),
+                              ),
+                              Expanded(
+                                flex: 2,
+                                child: Text('ch,j,g,sh',
+                                    textAlign: TextAlign.left),
+                              ),
+                              Expanded(
+                                flex: 11,
+                                child: Text('g looks like an upside-down 6',
+                                    textAlign: TextAlign.left),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: Text('7',
+                                    textAlign: TextAlign.left,
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold)),
+                              ),
+                              Expanded(
+                                flex: 2,
+                                child:
+                                    Text('c,gg,k,q', textAlign: TextAlign.left),
+                              ),
+                              Expanded(
+                                flex: 11,
+                                child: Text('k looks like 2 7s',
+                                    textAlign: TextAlign.left),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: Text('8',
+                                    textAlign: TextAlign.left,
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold)),
+                              ),
+                              Expanded(
+                                flex: 2,
+                                child:
+                                    Text('f,ph,v', textAlign: TextAlign.left),
+                              ),
+                              Expanded(
+                                flex: 11,
+                                child: Text(
+                                    'f is for "forever" or infinity "∞"',
+                                    textAlign: TextAlign.left),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: Text('9',
+                                    textAlign: TextAlign.left,
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold)),
+                              ),
+                              Expanded(
+                                flex: 2,
+                                child: Text('b,p', textAlign: TextAlign.left),
+                              ),
+                              Expanded(
+                                flex: 11,
+                                child: Text(
+                                    'b or p looks like a 9 when spinned or flipped',
+                                    textAlign: TextAlign.left),
+                              ),
+                            ],
+                          ),
+                        ]),
+                  ),
+                ))
+          ];
+        });
+  }
+}
+
 class GeneratorPage extends StatelessWidget {
+  isLinkPlayStore() {
+    return (kIsWeb || Platform.isAndroid);
+  }
+
+  isLinkAppStore() {
+    return (kIsWeb || Platform.isIOS);
+  }
+
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
     const appTitle = 'Major Words Maker';
     final theme = Theme.of(context); // ← Add this.
-    String tmpText =
-        '<strong style="font-style:italic;">The Major Sytem is a digit to consonant memory tool.<br />Each digit is represented by a set of similar sounding consonants.<br />It was designed by Stanislaus Mink von Wennsshein of 17th Century.<br />Here is the Major System:</strong><br />';
-    final helpText = tmpText;
 
     FocusNode focusNode = FocusNode();
     return MaterialApp(
       title: appTitle,
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
           title: const Text(appTitle),
-          actions: <Widget>[
-            // Add your menu items here
-            PopupMenuButton<String>(
-              constraints: BoxConstraints(
-                minWidth: 2.0 * 56.0,
-                maxWidth: MediaQuery.of(context).size.width,
-              ),
-              icon: Icon(Icons.menu),
-              onSelected: (value) {
-                //focusNode.unfocus();
-                FocusScope.of(context).unfocus();
-                if (kIsWeb == false) {
-                  Random random = Random();
-                  var isShowAd = random.nextInt(1000) >= 500; //EXACTLY HALF.
-                  if (isShowAd) {
-                    print(
-                        "Selected Menu makeMajor showInterstitialAd CALLING...");
-                    _MyHomePageState().showInterstitialAd();
-                  }
-                } else {
-                  print("NOT SHOWING AD");
-                }
-              },
-              itemBuilder: (BuildContext context) {
-                return [
-                  PopupMenuItem<String>(
-                    value: 'Help',
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
-                        child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Html(data: helpText),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    flex: 1,
-                                    child: Text('0',
-                                        textAlign: TextAlign.left,
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold)),
-                                  ),
-                                  Expanded(
-                                    flex: 2,
-                                    child:
-                                        Text('s,z', textAlign: TextAlign.left),
-                                  ),
-                                  Expanded(
-                                    flex: 11,
-                                    child: Text('z starts with "zero"',
-                                        textAlign: TextAlign.left),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    flex: 1,
-                                    child: Text('1',
-                                        textAlign: TextAlign.left,
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold)),
-                                  ),
-                                  Expanded(
-                                    flex: 2,
-                                    child: Text('d,t,th',
-                                        textAlign: TextAlign.left),
-                                  ),
-                                  Expanded(
-                                    flex: 11,
-                                    child: Text(
-                                        't is for "ten" th is for "THe one"',
-                                        textAlign: TextAlign.left),
-                                  )
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    flex: 1,
-                                    child: Text('2',
-                                        textAlign: TextAlign.left,
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold)),
-                                  ),
-                                  Expanded(
-                                    flex: 2,
-                                    child: Text('n', textAlign: TextAlign.left),
-                                  ),
-                                  Expanded(
-                                    flex: 11,
-                                    child: Text('"n" has two lines going down',
-                                        textAlign: TextAlign.left),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    flex: 1,
-                                    child: Text('3',
-                                        textAlign: TextAlign.left,
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold)),
-                                  ),
-                                  Expanded(
-                                    flex: 2,
-                                    child: Text('m', textAlign: TextAlign.left),
-                                  ),
-                                  Expanded(
-                                    flex: 11,
-                                    child: Text(
-                                        '"m" has three lines going down',
-                                        textAlign: TextAlign.left),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    flex: 1,
-                                    child: Text('4',
-                                        textAlign: TextAlign.left,
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold)),
-                                  ),
-                                  Expanded(
-                                    flex: 2,
-                                    child: Text('r', textAlign: TextAlign.left),
-                                  ),
-                                  Expanded(
-                                    flex: 11,
-                                    child: Text('r is last letter of "four"',
-                                        textAlign: TextAlign.left),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    flex: 1,
-                                    child: Text('5',
-                                        textAlign: TextAlign.left,
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold)),
-                                  ),
-                                  Expanded(
-                                    flex: 2,
-                                    child: Text('l', textAlign: TextAlign.left),
-                                  ),
-                                  Expanded(
-                                    flex: 11,
-                                    child: Text(
-                                        'l is half or 50% of a box(2 Ls put together)',
-                                        textAlign: TextAlign.left),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    flex: 1,
-                                    child: Text('6',
-                                        textAlign: TextAlign.left,
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold)),
-                                  ),
-                                  Expanded(
-                                    flex: 2,
-                                    child: Text('ch,j,g,sh',
-                                        textAlign: TextAlign.left),
-                                  ),
-                                  Expanded(
-                                    flex: 11,
-                                    child: Text('g looks like an upside-down 6',
-                                        textAlign: TextAlign.left),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    flex: 1,
-                                    child: Text('7',
-                                        textAlign: TextAlign.left,
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold)),
-                                  ),
-                                  Expanded(
-                                    flex: 2,
-                                    child: Text('c,gg,k,q',
-                                        textAlign: TextAlign.left),
-                                  ),
-                                  Expanded(
-                                    flex: 11,
-                                    child: Text('k looks like 2 7s',
-                                        textAlign: TextAlign.left),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    flex: 1,
-                                    child: Text('8',
-                                        textAlign: TextAlign.left,
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold)),
-                                  ),
-                                  Expanded(
-                                    flex: 2,
-                                    child: Text('f,ph,v',
-                                        textAlign: TextAlign.left),
-                                  ),
-                                  Expanded(
-                                    flex: 11,
-                                    child: Text(
-                                        'f is for "forever" or infinity "∞"',
-                                        textAlign: TextAlign.left),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    flex: 1,
-                                    child: Text('9',
-                                        textAlign: TextAlign.left,
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold)),
-                                  ),
-                                  Expanded(
-                                    flex: 2,
-                                    child:
-                                        Text('b,p', textAlign: TextAlign.left),
-                                  ),
-                                  Expanded(
-                                    flex: 11,
-                                    child: Text(
-                                        'b or p looks like a 9 when spinned or flipped',
-                                        textAlign: TextAlign.left),
-                                  ),
-                                ],
-                              ),
-                            ]),
-                      ),
-                    ),
-                  )
-                ];
-                /*
-                return [
-                  PopupMenuItem<String>(
-                    value: 'Help',
-                    //width: MediaQuery.of(context).size.width,
-                    child: Container(width: 200, child: Html(data: helpText)),
-                  )
-                ];
-                */
-              },
-            ),
-          ],
+          actions: <Widget>[MyPopup()],
         ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -889,137 +881,113 @@ class GeneratorPage extends StatelessWidget {
                   }),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-              child: ElevatedButton(
-                onPressed: () async {
-                  //if (Platform.isAndroid) {
-                  focusNode.unfocus();
-                  //} else if (Platform.isIOS) {
-                  FocusScope.of(context).unfocus();
-                  //}
-                  //await Future.delayed(Duration(seconds: 1), () {
-                  // Code to be executed after the delay
-                  print("Delayed action executed!");
-                  appState.makeMajorWords(context);
-                  //});
-                },
-                child: Text('Make Major Words'),
+                padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                child: ElevatedButton(
+                  onPressed: () async {
+                    //if (Platform.isAndroid) {
+                    focusNode.unfocus();
+                    //} else if (Platform.isIOS) {
+                    FocusScope.of(context).unfocus();
+                    //}
+                    //await Future.delayed(Duration(seconds: 1), () {
+                    // Code to be executed after the delay
+                    print("Delayed action executed!");
+                    appState.makeMajorWords(context);
+                    //});
+                  },
+                  child: Text('Make Major Words'),
+                )),
+            Padding(
+              padding: EdgeInsets.all(10.0),
+              child: SizedBox(
+                  width: 250,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      // Add your button's functionality here
+                      launch('https://learnfactsquick.com');
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color.fromARGB(255, 204, 159,
+                          252), // Change the button's background color
+                      foregroundColor: Colors.white, // Change the text color
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Image.asset(
+                          'assets/images/lfq_icon.png', // Path to your image asset
+                          width: 25, // Set the desired width
+                          height: 25, // Set the desired height
+                        ),
+                        SizedBox(width: 8),
+                        Text('See other tools from the website',
+                            style: TextStyle(fontSize: 10)), // Text
+                      ],
+                    ),
+                  )),
+            ),
+            Visibility(
+              visible: isLinkPlayStore(),
+              child: Padding(
+                padding: EdgeInsets.all(10.0),
+                child: SizedBox(
+                    width: 250,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        // Add your button's functionality here
+                        launch(
+                            'https://play.google.com/store/apps/dev?id=5263177578338103821');
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors
+                            .green, // Change the button's background color
+                        foregroundColor: Colors.white, // Change the text color
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Icon(Icons.play_circle_fill), // Google Play icon
+                          SizedBox(
+                              width:
+                                  8), // Add some space between the icon and text
+                          Text('See other apps from Play Store',
+                              style: TextStyle(fontSize: 10)), // Text
+                        ],
+                      ),
+                    )),
               ),
             ),
             Visibility(
-              visible: appState.lastNumber.trim() != '',
+              visible: isLinkAppStore(),
               child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Text(
-                    "Found ${appState.words.length} major words for number '${appState.lastNumber}':"),
-              ),
+                  padding: EdgeInsets.all(10.0),
+                  child: SizedBox(
+                      width: 250,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          // Add your button's functionality here
+                          launch(
+                              'https://apps.apple.com/us/developer/keith-harryman/id1693739510');
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors
+                              .blue, // Change the button's background color
+                          foregroundColor:
+                              Colors.white, // Change the text color
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Icon(Icons.download_sharp), // Google Play icon
+                            SizedBox(
+                                width:
+                                    8), // Add some space between the icon and text
+                            Text('See other apps from App Store',
+                                style: TextStyle(fontSize: 10)), // Text
+                          ],
+                        ),
+                      ))),
             ),
-            Expanded(
-              child: GestureDetector(
-                onTap: () {
-                  print("BODY UNFOCUSSING");
-                  focusNode.unfocus();
-                },
-                child: SizedBox(
-                  width: double.infinity,
-                  child: ListView(children: <Widget>[
-                    for (var i = 0; i < appState.words.length; i++)
-                      Flex(
-                        direction: Axis.horizontal,
-                        children: [
-                          Flexible(
-                            flex: 1,
-                            child: Card(
-                              color:
-                                  theme.colorScheme.surface, // ← And also this.
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width * .06,
-                                    child: Align(
-                                      alignment: Alignment.centerRight,
-                                      child: Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            0, 0, 5, 0),
-                                        child: Text("${i + 1})",
-                                            softWrap: true,
-                                            style: TextStyle(fontSize: 12.0)),
-                                      ),
-                                    ),
-                                  ),
-                                  InkWell(
-                                    onTap: () {
-                                      // Handle the click action here
-                                      // For example, you can navigate to a new screen or perform some other action.
-                                      print("BODY UNFOCUSSING");
-                                      focusNode.unfocus();
-                                      print(
-                                          "Copy word, '${appState.words[i][0]}' clicked!");
-                                      Clipboard.setData(ClipboardData(
-                                          text: appState.words[i][0]));
-                                    },
-                                    child: SizedBox(
-                                      width: MediaQuery.of(context).size.width *
-                                          .15,
-                                      child: Text(appState.words[i][0],
-                                          softWrap: true,
-                                          style: TextStyle(fontSize: 12.0)),
-                                    ),
-                                  ),
-                                  InkWell(
-                                    onTap: () {
-                                      // Handle the click action here
-                                      // For example, you can navigate to a new screen or perform some other action.
-                                      print("BODY UNFOCUSSING");
-                                      focusNode.unfocus();
-                                      print(
-                                          "Copy formatted word, '${appState.words[i][1]}' clicked!");
-                                      Clipboard.setData(ClipboardData(
-                                          text: appState.words[i][1]));
-                                    },
-                                    child: SizedBox(
-                                      width: MediaQuery.of(context).size.width *
-                                          .15,
-                                      child: Text(
-                                        "( ${appState.words[i][1]} )",
-                                        softWrap: true,
-                                        style: TextStyle(fontSize: 10.0),
-                                      ),
-                                    ),
-                                  ),
-                                  InkWell(
-                                    onTap: () {
-                                      // Handle the click action here
-                                      // For example, you can navigate to a new screen or perform some other action.
-                                      print("BODY UNFOCUSSING");
-                                      focusNode.unfocus();
-                                      print(
-                                          "Definition for '${appState.words[i][0]}', copy '${appState.words[i][2]}'' clicked!");
-                                      Clipboard.setData(ClipboardData(
-                                          text: appState.words[i][2]));
-                                    },
-                                    child: SizedBox(
-                                      width: MediaQuery.of(context).size.width *
-                                          .56,
-                                      child: Text(
-                                        appState.words[i][2],
-                                        softWrap: true,
-                                        style: TextStyle(fontSize: 12.0),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                  ]),
-                ),
-              ),
-            )
           ],
         ),
       ),
