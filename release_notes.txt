@@ -1,1 +1,6 @@
-This first release includes basic start up features such as copying, and a popup menu. Future releases may include being able to generate multiple lists, and being able to use other languages.
+This new release supports multiple languages.
+The app itself can be translated and major words can be created in other languages using latinized alphabet.
+The words can be listed in any number or all of the available languages.
+The definitions of the words will be translated into the app's current language.
+The offline English version should work the same (if app is in English and target language is only English).
+It currently includes Spanish but later will automatically include French, German, etc..
