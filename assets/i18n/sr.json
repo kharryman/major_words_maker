@@ -68,5 +68,7 @@
     "PROMPT_SOUND_R": "Као звук брзог аутомобила на 4 точка",
     "PROMPT_SOUND_SZ": "'С' или 'З' штрајкови стављају све.",
     "PROMPT_TOOLS_WEBSITE": "Погледајте друге алате са веб локације",
-    "SELECT_LANGUAGES": "Изаберите Језици"
+    "SELECT_ALL_LANGUAGES": "Изаберите Сви језици",
+    "SELECT_LANGUAGES": "Изаберите Језици",
+    "SELECT_NO_LANGUAGES": "Изаберите Без језика"
 }

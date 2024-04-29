@@ -82,7 +82,6 @@ class MenuList extends StatefulWidget {
 }
 
 class MenuListState extends State<MenuList> {
-  String selectedMapType = "normal";
   List<dynamic> languages = [];
   @override
   void initState() {

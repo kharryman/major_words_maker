@@ -68,5 +68,7 @@
     "PROMPT_SOUND_R": "Wéi de Sound vun 4-Rad séier Auto",
     "PROMPT_SOUND_SZ": "'S' oder 'Z' Strikes setzen alles.",
     "PROMPT_TOOLS_WEBSITE": "Gesinn aner Tools vun der Websäit",
-    "SELECT_LANGUAGES": "Wielt Sproochen"
+    "SELECT_ALL_LANGUAGES": "Wielt All Sproochen",
+    "SELECT_LANGUAGES": "Wielt Sproochen",
+    "SELECT_NO_LANGUAGES": "Wielt keng Sproochen"
 }

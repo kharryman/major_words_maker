@@ -68,5 +68,7 @@
     "PROMPT_SOUND_R": "Seperti bunyi kereta laju 4 roda",
     "PROMPT_SOUND_SZ": "Serangan 'S' atau 'Z' meletakkan segala-galanya.",
     "PROMPT_TOOLS_WEBSITE": "Lihat alatan lain dari tapak web",
-    "SELECT_LANGUAGES": "Pilih Bahasa"
+    "SELECT_ALL_LANGUAGES": "Pilih Semua Bahasa",
+    "SELECT_LANGUAGES": "Pilih Bahasa",
+    "SELECT_NO_LANGUAGES": "Pilih Tiada Bahasa"
 }

@@ -68,5 +68,7 @@
     "PROMPT_SOUND_R": "Bħall-ħoss ta 'karozza veloċi b'4 roti",
     "PROMPT_SOUND_SZ": "Strajks 'S' jew 'Z' ipoġġu kollox.",
     "PROMPT_TOOLS_WEBSITE": "Ara għodod oħra mill-websajt",
-    "SELECT_LANGUAGES": "Agħżel Lingwi"
+    "SELECT_ALL_LANGUAGES": "Agħżel il-Lingwi Kollha",
+    "SELECT_LANGUAGES": "Agħżel Lingwi",
+    "SELECT_NO_LANGUAGES": "Agħżel Nru Lingwi"
 }

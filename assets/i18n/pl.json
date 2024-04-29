@@ -68,5 +68,7 @@
     "PROMPT_SOUND_R": "Jak dźwięk czterokołowego szybkiego samochodu",
     "PROMPT_SOUND_SZ": "Uderzenia „S” lub „Z” stawiają wszystko.",
     "PROMPT_TOOLS_WEBSITE": "Zobacz inne narzędzia na stronie",
-    "SELECT_LANGUAGES": "Wybierz Języki"
+    "SELECT_ALL_LANGUAGES": "Wybierz opcję Wszystkie języki",
+    "SELECT_LANGUAGES": "Wybierz Języki",
+    "SELECT_NO_LANGUAGES": "Wybierz opcję Brak języków"
 }

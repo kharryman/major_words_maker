@@ -16,11 +16,13 @@ class WordsPageNew extends StatefulWidget {
   final String lastNumber;
   final Map<String, List<dynamic>> words;
   final int countWords;
+  final int countTotal;
 
   WordsPageNew(
       {required this.lastNumber,
       required this.words,
-      required this.countWords});
+      required this.countWords,
+      required this.countTotal});
   @override
   // ignore: library_private_types_in_public_api
   State<WordsPageNew> createState() => WordsPageNewState();
@@ -87,7 +89,8 @@ class WordsPageNewState extends State<WordsPageNew> {
                       child: Text(
                           FlutterI18n.translate(context, 'PROMPT_FOUND_WORDS',
                               translationParams: {
-                                'fcwrds': (widget.countWords).toString(),
+                                'fcwrds':
+                                    '${(widget.countWords).toString()}/${widget.countTotal}',
                                 'fnmbr': widget.lastNumber
                               }),
                           style: TextStyle(

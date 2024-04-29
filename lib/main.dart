@@ -16,12 +16,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_i18n/loaders/decoders/base_decode_strategy.dart';
 import 'package:flutter_i18n/loaders/decoders/json_decode_strategy.dart';
+import 'package:major_words_maker/dict_big.dart';
 import 'package:major_words_maker/menu.dart';
 import 'package:major_words_maker/words_new.dart';
 import 'package:major_words_maker/words_old.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 //import 'package:list_major_english_words/list_major_english_words.dart';
-import 'major_english_words.dart';
+//import 'major_english_words.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
@@ -33,6 +34,7 @@ import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'package:multiselect/multiselect.dart';
 import 'package:multiselect_dropdown_flutter/multiselect_dropdown_flutter.dart';
+import 'package:multi_dropdown/multiselect_dropdown.dart';
 
 //import 'package:flutter_native_splash/flutter_native_splash.dart';
 //import 'package:device_info/device_info.dart';
@@ -48,6 +50,9 @@ int numInterstitialLoadAttempts = 0;
 
 ///------
 dynamic selectedMajorLanguage;
+List<dynamic> availLanguages = [];
+List<String> myList = [];
+List<String> myFilteredLanguages = [];
 
 class MajorWord {
   String name;
@@ -148,7 +153,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class MyHomePageState extends State<MyHomePage> {
+  final MultiSelectController controllerMultiselect = MultiSelectController();
   var selectedIndex = 0; // ← Add this property.
+
   //bool isMakeMajor = false;
   bool isMakeMajor = true;
   List<dynamic> languages = [
@@ -173,14 +180,6 @@ class MyHomePageState extends State<MyHomePage> {
     },
     {"LID": "5", "name1": "čeština", "name2": "LANGUAGE_CZECH", "value": "cs"},
     {"LID": "6", "name1": "Dansk", "name2": "LANGUAGE_DANISH", "value": "da"},
-    /*
-    {
-      "LID": "7",
-      "name1": "Nederlands",
-      "name2": "LANGUAGE_DUTCH",
-      "value": "nl"
-    },
-    */
     {
       "LID": "8",
       "name1": "English",
@@ -193,14 +192,6 @@ class MyHomePageState extends State<MyHomePage> {
       "name2": "LANGUAGE_ESTONIAN",
       "value": "et"
     },
-    /*
-    {
-      "LID": "10",
-      "name1": "Filipino",
-      "name2": "LANGUAGE_FILIPINO",
-      "value": "tl"
-    },
-    */
     {
       "LID": "11",
       "name1": "Suomalainen",
@@ -251,14 +242,6 @@ class MyHomePageState extends State<MyHomePage> {
       "name2": "LANGUAGE_ITALIAN",
       "value": "it"
     },
-    /*
-    {
-      "LID": "21",
-      "name1": "Kurdî kurd",
-      "name2": "LANGUAGE_KURDISH_KURMANJI",
-      "value": "ku"
-    },
-    */
     {
       "LID": "22",
       "name1": "Lëtzebuergesch",
@@ -268,14 +251,6 @@ class MyHomePageState extends State<MyHomePage> {
     {"LID": "23", "name1": "Melayu", "name2": "LANGUAGE_MALAY", "value": "ms"},
     {"LID": "24", "name1": "Malti", "name2": "LANGUAGE_MALTESE", "value": "mt"},
     {"LID": "25", "name1": "Maori", "name2": "LANGUAGE_MAORI", "value": "mi"},
-    /*
-    {
-      "LID": "26",
-      "name1": "Norsk",
-      "name2": "LANGUAGE_NORWEGIAN",
-      "value": "no"
-    },
-    */
     {"LID": "27", "name1": "Polski", "name2": "LANGUAGE_POLISH", "value": "pl"},
     {
       "LID": "28",
@@ -320,26 +295,13 @@ class MyHomePageState extends State<MyHomePage> {
       "name2": "LANGUAGE_SWEDISH",
       "value": "sv"
     },
-    /*
-    {"LID": "37", "name1": "Türk", "name2": "LANGUAGE_TURKISH", "value": "tr"},
-    */
-    /*
-    {
-      "LID": "38",
-      "name1": "Tiếng Việt",
-      "name2": "LANGUAGE_VIETNAMESE",
-      "value": "vi"
-    },
-    */
     {"LID": "39", "name1": "Cymraeg", "name2": "LANGUAGE_WELSH", "value": "cy"}
   ];
 
-  dynamic selectedMajorLanguage;
-  List<dynamic> availLanguages = [];
-  bool isLanguagesLoading = true;
-  List<String> myFilteredLanguages = [];
-  bool isAllLanguages = true;
-  List<String> myList = ["..."];
+  bool isLanguagesLoading = false;
+  bool isAllLanguages = false;
+
+  int lastSelectedLanguagesLength = 0;
 
   @override
   void initState() {
@@ -354,6 +316,7 @@ class MyHomePageState extends State<MyHomePage> {
     setAvailLanguages();
   }
 
+/*
   @override
   void didChangeDependencies() {
     print("didChangeDependencies called");
@@ -371,27 +334,31 @@ class MyHomePageState extends State<MyHomePage> {
       resetMyList();
     });
   }
+  */
+
+  getTransLangValue(dynamic value) {
+    return "${value["name1"]}(${FlutterI18n.translate(context, value["name2"])})";
+  }
 
   resetMyList() {
     print("resetMyList called");
 
-    myList = [FlutterI18n.translate(context, "PROMPT_ALL")];
-    myList.addAll(availLanguages.map((dynamic value) {
-      return "${value["name1"]}(${FlutterI18n.translate(context, value["name2"])})";
-    }).toList());
-    print(
-        "resetMyList called CONTEXT NOT NULL! myList = ${json.encode(myList)}");
-    print("selectedMajorLanguage[value] = ${selectedMajorLanguage["value"]}");
+    myList = [];
+
+    myList.addAll(List<String>.from(availLanguages.map((dynamic value) {
+      return getTransLangValue(value);
+    }).toList()));
+    Set<String> uniqueMyList = myList.toSet();
+    myList = uniqueMyList.toList();
+
     dynamic myLanguage = List<dynamic>.from(languages
         .where(
             (dynamic lang) => lang["value"] == selectedMajorLanguage["value"])
         .toList())[0];
-    print("myList = $myList, myLanguage[name1] = ${myLanguage["name1"]}");
-    List<String> foundMyListEles = List<String>.from(myList
-        .where((String myEle) => myEle.contains(myLanguage["name1"]))
-        .toList());
+    List<String> foundMyListEles = List<String>.from(
+        myList.where((myEle) => myEle.contains(myLanguage["name1"])).toList());
     if (foundMyListEles.isNotEmpty) {
-      String myListElement = foundMyListEles[0];
+      dynamic myListElement = foundMyListEles[0];
       myFilteredLanguages = [myListElement];
     } else {
       myFilteredLanguages = [];
@@ -405,7 +372,7 @@ class MyHomePageState extends State<MyHomePage> {
     bool isSuccess = true;
     List<dynamic> gotLanguages = [];
     final response = await http.get(Uri.parse(
-        'https://www.learnfactsquick.com/lfq_app_php/get_languages.php'));
+        'https://www.learnfactsquick.com/lfq_app_php/get_dict_langs.php'));
     //hideProgress(context);
     if (response.statusCode == 200) {
       data = Map<String, dynamic>.from(json.decode(response.body));
@@ -504,29 +471,44 @@ class MyHomePageState extends State<MyHomePage> {
 
   List<dynamic> oldWords = [];
   Map<String, List<dynamic>> newWords = {};
-  List<List<Map<String, List<String>>>> dicWords = [
-    list_major_english_words1,
-    list_major_english_words2,
-    list_major_english_words3,
-    list_major_english_words4,
-    list_major_english_words5,
-    list_major_english_words6,
-    list_major_english_words7,
-    list_major_english_words8,
-    list_major_english_words9,
-    list_major_english_words10,
-    list_major_english_words11,
-    list_major_english_words12,
-    list_major_english_words13,
-    list_major_english_words14,
-    list_major_english_words15,
-    list_major_english_words16,
-    list_major_english_words17,
-    list_major_english_words18,
-    list_major_english_words19,
-    list_major_english_words20,
-    list_major_english_words21,
-    list_major_english_words22
+  List<Map<String, List<String>>> dicWords = [
+    dicA1,
+    dicA2,
+    dicB1,
+    dicB2,
+    dicC1,
+    dicC2,
+    dicC3,
+    dicD1,
+    dicD2,
+    dicE1,
+    dicF1,
+    dicG1,
+    dicH1,
+    dicI1,
+    dicJ1,
+    dicK1,
+    dicL1,
+    dicM1,
+    dicM2,
+    dicN1,
+    dicO1,
+    dicP1,
+    dicP2,
+    dicQ1,
+    dicR1,
+    dicR2,
+    dicS1,
+    dicS2,
+    dicS3,
+    dicT1,
+    dicT2,
+    dicU1,
+    dicV1,
+    dicW1,
+    dicX1,
+    dicY1,
+    dicZ1
   ];
   final TextEditingController numberController = TextEditingController();
 
@@ -545,7 +527,7 @@ class MyHomePageState extends State<MyHomePage> {
         myFilteredLanguages[0] == "English(English)") {
       makeMajorWordsOld(context);
     } else {
-      makeMajorWords(context, targetLanguage);
+      makeMajorWordsNew(context, targetLanguage);
     }
   }
 
@@ -556,24 +538,41 @@ class MyHomePageState extends State<MyHomePage> {
     print("list_english_words length = ${dicWords.length}");
     print("makeMajorWordsOld called");
     print(numberController.text);
-    lastNumber = numberController.text;
+    lastNumber = numberController.text.toString();
     //var num = "";
     oldWords = [];
+    List<dynamic> filteredWords = [];
     String key = "";
+    List<String> words = [];
     var formattedWord = "";
     Map<String, List<String>> dicObj;
+    String dictNum = "";
     for (var i = 0; i < dicWords.length; i++) {
-      for (var j = 0; j < dicWords[i].length; j++) {
-        dicObj = dicWords[i][j];
-        key = dicObj.keys.toList().first;
+      dicObj = dicWords[i];
+      words = dicObj.keys.toList();
+      for (var j = 0; j < words.length; j++) {
         //print("key: $key, value: $value");
         //print("FOR WORD, $dicWord,  GOT NUM $num");
-        if (dicObj[key]?[0].toString() == numberController.text.toString()) {
-          formattedWord = formatWord(key);
-          oldWords.add([key, formattedWord, dicObj[key]!.elementAt(1)]);
+        dictNum = "";
+        dictNum = dicObj[words[j]]![0].toString();
+        if (dictNum.length >= lastNumber.length) {
+          if (dictNum.substring(0, lastNumber.length) == lastNumber) {
+            formattedWord = formatWord(words[j]);
+            filteredWords
+                .add([words[j], formattedWord, dicObj[words[j]]!.elementAt(1)]);
+          }
         }
       }
     }
+    int countTotal = filteredWords.length;
+    filteredWords.shuffle();
+    if (filteredWords.length > 500) {
+      oldWords = filteredWords.sublist(0, 500);
+    } else {
+      oldWords = filteredWords;
+    }
+    oldWords.sort((a, b) => a[0].toString().compareTo(b[0].toString()));
+    print("oldWords.length = ${oldWords.length}");
     //print("WORDS FOUND= $words");
     //hideProgress(context);
     //isLoading = false;
@@ -582,15 +581,17 @@ class MyHomePageState extends State<MyHomePage> {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) =>
-                  WordsPageOld(lastNumber: lastNumber, words: oldWords)));
+              builder: (context) => WordsPageOld(
+                  lastNumber: lastNumber,
+                  words: oldWords,
+                  countTotal: countTotal)));
 
       setState(() {});
     });
   }
 
-  makeMajorWords(BuildContext context, String targetLanguage) async {
-    print("makeMajorWords called targetLanguage = $targetLanguage");
+  makeMajorWordsNew(BuildContext context, String targetLanguage) async {
+    print("makeMajorWordsNew called targetLanguage = $targetLanguage");
     if (numberController.text.trim() == '') {
       return;
     }
@@ -634,15 +635,20 @@ class MyHomePageState extends State<MyHomePage> {
     dynamic data = {"SUCCESS": false};
     final response = await http.post(
         Uri.parse(
-            'https://www.learnfactsquick.com/major_words_maker/make_major_words.php'),
+            'https://www.learnfactsquick.com/major_words_maker/make_major.php'),
         body: json.encode(body));
     //hideProgress(context);
     if (response.statusCode == 200) {
       data = Map<String, dynamic>.from(json.decode(response.body));
       print("GET MAJOR WORDS data = ${json.encode(data)}");
       if (data["SUCCESS"] == true) {
-        gotMajorWords = Map<String, List<dynamic>>.from(data["WORDS"]);
         countWords = data["COUNT_WORDS"];
+        int countTotal = data["COUNT_TOTAL"];
+        if (countWords > 0) {
+          gotMajorWords = Map<String, List<dynamic>>.from(data["WORDS"]);
+        } else {
+          gotMajorWords = {};
+        }
         print("GOT MAJOR WORDS = ${json.encode(data)}");
         showInterstitialAd(() {
           print("NOT SHOWING AD");
@@ -652,7 +658,8 @@ class MyHomePageState extends State<MyHomePage> {
                   builder: (context) => WordsPageNew(
                       lastNumber: lastNumber,
                       words: gotMajorWords,
-                      countWords: countWords)));
+                      countWords: countWords,
+                      countTotal: countTotal)));
           setState(() {});
         });
       } else {
@@ -776,12 +783,14 @@ class MyHomePageState extends State<MyHomePage> {
     }
   }
 
+/*
   @override
   void didUpdateWidget(covariant MyHomePage oldWidget) {
     super.didUpdateWidget(oldWidget);
     FlutterI18n.refresh(context,
         Locale(Provider.of<AppData>(context).selectedLanguage["value"]));
   }
+  */
 
   static final AdRequest request = AdRequest(
     keywords: <String>[
@@ -906,21 +915,23 @@ class MyHomePageState extends State<MyHomePage> {
   setLanguages(BuildContext context, List<String> newList) {
     print(
         "setLanguages called, newList = ${json.encode(newList)}, myFilteredLanguages = ${json.encode(myFilteredLanguages)}");
-    String promptAllTrans = FlutterI18n.translate(context, "PROMPT_ALL");
-    setState(() {
-      if (newList.contains(promptAllTrans) && isAllLanguages == false) {
-        isAllLanguages = true;
-        print("SELECTING ALL!!");
-        myFilteredLanguages = [promptAllTrans];
-        myFilteredLanguages.addAll(availLanguages.map((dynamic value) {
-          return "${value["name1"]}(${FlutterI18n.translate(context, value["name2"])})";
-        }).toList());
-      } else if (isAllLanguages == true &&
-          !myFilteredLanguages.contains(promptAllTrans)) {
-        isAllLanguages = false;
-        myFilteredLanguages = [];
-      } else {
+    Future.delayed(Duration(microseconds: 10), () {
+      setState(() {
         myFilteredLanguages = newList;
+      });
+    });
+  }
+
+  selectAllNoLanguages() {
+    setState(() {
+      isAllLanguages = !isAllLanguages;
+      if (isAllLanguages == true) {
+        myFilteredLanguages = List<String>.from(
+            availLanguages.map((lang) => getTransLangValue(lang)).toList());
+        Set<String> uniqueMyFilteredLanguages = myFilteredLanguages.toSet();
+        myFilteredLanguages = uniqueMyFilteredLanguages.toList();
+      } else {
+        myFilteredLanguages = [];
       }
     });
   }
@@ -943,19 +954,26 @@ class MyHomePageState extends State<MyHomePage> {
     final theme = Theme.of(context); // ← Add this.
 
     FocusNode focusNode = FocusNode();
+    String promptAll = FlutterI18n.translate(context, "PROMPT_ALL");
+    String myHint = myFilteredLanguages.isEmpty
+        ? FlutterI18n.translate(context, "SELECT_LANGUAGES")
+        : myFilteredLanguages
+            .where((mfl) => !mfl.contains("ALL"))
+            .toList()
+            .join(", ");
 
-    return Consumer<AppData>(builder: (context, appData, child) {
-      return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.blueAccent,
-          title: Text(appTitle, style: TextStyle(fontSize: tabFontSize)),
-          actions: <Widget>[
-            Menu(context: context, page: 'main', updateParent: updateSelf)
-          ],
-        ),
-        body: isLanguagesLoading == true || myList.isEmpty
-            ? Center(child: CircularProgressIndicator())
-            : Column(
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.blueAccent,
+        title: Text(appTitle, style: TextStyle(fontSize: tabFontSize)),
+        actions: <Widget>[
+          Menu(context: context, page: 'main', updateParent: updateSelf)
+        ],
+      ),
+      body: isLanguagesLoading == true || myList.isEmpty
+          ? Center(child: CircularProgressIndicator())
+          : SingleChildScrollView(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Padding(
@@ -983,26 +1001,47 @@ class MyHomePageState extends State<MyHomePage> {
                   ),
                   //Text(json.encode(myFilteredLanguages)),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-                    child: Container(
+                      padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          selectAllNoLanguages();
+                        },
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          backgroundColor: isAllLanguages == false
+                              ? Colors.purple[200]
+                              : Colors.grey[700],
+                          minimumSize: Size(75, 25),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                        ),
+                        child: Text(FlutterI18n.translate(
+                            context,
+                            (isAllLanguages == false
+                                ? FlutterI18n.translate(
+                                    context, "SELECT_ALL_LANGUAGES")
+                                : FlutterI18n.translate(
+                                    context, "SELECT_NO_LANGUAGES")))),
+                      )),
+                  Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
+                      child: Container(
                         decoration: BoxDecoration(color: Colors.white),
                         width: screenWidth - 40,
-                        child: DropDownMultiSelect(
-                          decoration: InputDecoration(
-                            filled: true,
-                            fillColor: Colors.white,
-                            border: OutlineInputBorder(),
-                          ),
+                        child: DropDownMultiSelect<String>(
                           isDense: true,
                           onChanged: (List<String> newList) {
-                            setLanguages(context, List<String>.from(newList));
+                            setState(() {
+                              setLanguages(context, newList);
+                            });
                           },
                           options: myList,
                           selectedValues: myFilteredLanguages,
                           whenEmpty: FlutterI18n.translate(
                               context, "SELECT_LANGUAGES"),
-                        )),
-                  ),
+                        ),
+                      )),
                   Padding(
                       padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                       child: ElevatedButton(
@@ -1133,8 +1172,8 @@ class MyHomePageState extends State<MyHomePage> {
                   ),
                 ],
               ),
-      );
-    });
+            ),
+    );
   }
 }
 

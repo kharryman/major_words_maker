@@ -68,5 +68,7 @@
     "PROMPT_SOUND_R": "Sida dhawaqa baabuur 4-taayir leh oo dheereeya",
     "PROMPT_SOUND_SZ": "'S' ama 'Z' ayaa wax walba dhigay.",
     "PROMPT_TOOLS_WEBSITE": "Ka eeg aaladaha kale ee shabakada",
-    "SELECT_LANGUAGES": "Dooro Luuqadaha"
+    "SELECT_ALL_LANGUAGES": "Dooro Dhammaan Luuqadaha",
+    "SELECT_LANGUAGES": "Dooro Luuqadaha",
+    "SELECT_NO_LANGUAGES": "Dooro Luuqado Maya"
 }

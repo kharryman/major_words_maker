@@ -68,5 +68,7 @@
     "PROMPT_SOUND_R": "Pei o le leo o le ta'avale saosaoa 4 uili",
     "PROMPT_SOUND_SZ": "'S' po'o 'Z' ta e tu'u ai mea uma.",
     "PROMPT_TOOLS_WEBSITE": "Va'ai isi meafaigaluega mai le upega tafa'ilagi",
-    "SELECT_LANGUAGES": "Filifili Gagana"
+    "SELECT_ALL_LANGUAGES": "Filifili Gagana Uma",
+    "SELECT_LANGUAGES": "Filifili Gagana",
+    "SELECT_NO_LANGUAGES": "Filifili Leai Gagana"
 }

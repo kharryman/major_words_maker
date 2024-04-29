@@ -68,5 +68,7 @@
     "PROMPT_SOUND_R": "Seperti suara mobil kencang roda 4",
     "PROMPT_SOUND_SZ": "Serangan 'S' atau 'Z' menunjukkan segalanya.",
     "PROMPT_TOOLS_WEBSITE": "Lihat alat lain dari situs web",
-    "SELECT_LANGUAGES": "Pilih Bahasa"
+    "SELECT_ALL_LANGUAGES": "Pilih Semua Bahasa",
+    "SELECT_LANGUAGES": "Pilih Bahasa",
+    "SELECT_NO_LANGUAGES": "Pilih Tanpa Bahasa"
 }

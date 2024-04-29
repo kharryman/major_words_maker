@@ -68,5 +68,7 @@
     "PROMPT_SOUND_R": "Kao zvuk brzog automobila na 4 točka",
     "PROMPT_SOUND_SZ": "'S' ili 'Z' udarci stavljaju sve.",
     "PROMPT_TOOLS_WEBSITE": "Pogledajte ostale alate na web stranici",
-    "SELECT_LANGUAGES": "Odaberite Jezici"
+    "SELECT_ALL_LANGUAGES": "Odaberite Svi jezici",
+    "SELECT_LANGUAGES": "Odaberite Jezici",
+    "SELECT_NO_LANGUAGES": "Odaberite Bez jezika"
 }

@@ -68,5 +68,7 @@
     "PROMPT_SOUND_R": "Wie der Klang eines schnellen Autos auf vier Rädern",
     "PROMPT_SOUND_SZ": "Mit ,S‘- oder ,Z‘-Schlägen wird alles markiert.",
     "PROMPT_TOOLS_WEBSITE": "Weitere Tools auf der Website anzeigen",
-    "SELECT_LANGUAGES": "Sprachen auswählen"
+    "SELECT_ALL_LANGUAGES": "Alle Sprachen auswählen",
+    "SELECT_LANGUAGES": "Sprachen auswählen",
+    "SELECT_NO_LANGUAGES": "Keine Sprachen auswählen"
 }

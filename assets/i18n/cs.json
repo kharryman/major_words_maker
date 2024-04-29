@@ -68,5 +68,7 @@
     "PROMPT_SOUND_R": "Jako zvuk 4kolového rychlého auta",
     "PROMPT_SOUND_SZ": "Údery „S“ nebo „Z“ dávají všechno.",
     "PROMPT_TOOLS_WEBSITE": "Podívejte se na další nástroje z webu",
-    "SELECT_LANGUAGES": "Vyberte Jazyky"
+    "SELECT_ALL_LANGUAGES": "Vyberte Všechny jazyky",
+    "SELECT_LANGUAGES": "Vyberte Jazyky",
+    "SELECT_NO_LANGUAGES": "Vyberte možnost Žádné jazyky"
 }

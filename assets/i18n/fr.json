@@ -68,5 +68,7 @@
     "PROMPT_SOUND_R": "Comme le bruit d'une voiture rapide à 4 roues",
     "PROMPT_SOUND_SZ": "Les frappes « S » ou « Z » mettent tout.",
     "PROMPT_TOOLS_WEBSITE": "Voir d'autres outils sur le site Web",
-    "SELECT_LANGUAGES": "Sélectionnez les langues"
+    "SELECT_ALL_LANGUAGES": "Sélectionner toutes les langues",
+    "SELECT_LANGUAGES": "Sélectionnez les langues",
+    "SELECT_NO_LANGUAGES": "Ne sélectionner aucune langue"
 }

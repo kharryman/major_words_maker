@@ -68,5 +68,7 @@
     "PROMPT_SOUND_R": "Mint egy négykerekű gyors autó hangja",
     "PROMPT_SOUND_SZ": "Az „S” vagy „Z” ütések mindent megtesznek.",
     "PROMPT_TOOLS_WEBSITE": "Tekintse meg az egyéb eszközöket a webhelyen",
-    "SELECT_LANGUAGES": "Válassza a Nyelvek lehetőséget"
+    "SELECT_ALL_LANGUAGES": "Válassza az Összes nyelv lehetőséget",
+    "SELECT_LANGUAGES": "Válassza a Nyelvek lehetőséget",
+    "SELECT_NO_LANGUAGES": "Válassza a Nincs nyelv lehetőséget"
 }

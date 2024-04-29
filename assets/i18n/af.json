@@ -68,5 +68,7 @@
     "PROMPT_SOUND_R": "Soos die geluid van 4-wiel vinnige motor",
     "PROMPT_SOUND_SZ": "'S' of 'Z' stakings sit alles.",
     "PROMPT_TOOLS_WEBSITE": "Sien ander gereedskap van die webwerf",
-    "SELECT_LANGUAGES": "Kies Tale"
+    "SELECT_ALL_LANGUAGES": "Kies Alle tale",
+    "SELECT_LANGUAGES": "Kies Tale",
+    "SELECT_NO_LANGUAGES": "Kies Geen tale"
 }

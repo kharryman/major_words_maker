@@ -68,5 +68,7 @@
     "PROMPT_SOUND_R": "Pērā i te tangi o te waka tere 4 wira",
     "PROMPT_SOUND_SZ": "Ko nga patu 'S', 'Z' ranei ka waiho nga mea katoa.",
     "PROMPT_TOOLS_WEBSITE": "Tirohia etahi atu taputapu mai i te paetukutuku",
-    "SELECT_LANGUAGES": "Tīpako Reo"
+    "SELECT_ALL_LANGUAGES": "Tīpakohia nga Reo Katoa",
+    "SELECT_LANGUAGES": "Tīpako Reo",
+    "SELECT_NO_LANGUAGES": "Tīpakohia Kaore he Reo"
 }

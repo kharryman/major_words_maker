@@ -15,8 +15,12 @@ import 'main.dart';
 class WordsPageOld extends StatefulWidget {
   final String lastNumber;
   final List<dynamic> words;
+  final int countTotal;
 
-  WordsPageOld({required this.lastNumber, required this.words});
+  WordsPageOld(
+      {required this.lastNumber,
+      required this.words,
+      required this.countTotal});
   @override
   // ignore: library_private_types_in_public_api
   State<WordsPageOld> createState() => WordsPageOldState();
@@ -65,10 +69,12 @@ class WordsPageOldState extends State<WordsPageOld> {
                     child: Padding(
                       padding: const EdgeInsets.all(20),
                       child: Text(FlutterI18n.translate(
-                          context, 'PROMPT_FOUND_WORDS', translationParams: {
-                        'fcwrds': (widget.words.length).toString(),
-                        'fnmbr': widget.lastNumber
-                      })),
+                          context, 'PROMPT_FOUND_WORDS',
+                          translationParams: {
+                            'fcwrds':
+                                '${(widget.words.length).toString()}/${widget.countTotal}',
+                            'fnmbr': widget.lastNumber
+                          })),
                     ),
                   ),
                   Expanded(

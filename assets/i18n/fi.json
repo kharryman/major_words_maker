@@ -68,5 +68,7 @@
     "PROMPT_SOUND_R": "Kuin 4-pyöräisen nopean auton ääni",
     "PROMPT_SOUND_SZ": "\"S\" tai \"Z\" lakot laittaa kaiken.",
     "PROMPT_TOOLS_WEBSITE": "Katso muut työkalut verkkosivustolta",
-    "SELECT_LANGUAGES": "Valitse Kielet"
+    "SELECT_ALL_LANGUAGES": "Valitse Kaikki kielet",
+    "SELECT_LANGUAGES": "Valitse Kielet",
+    "SELECT_NO_LANGUAGES": "Valitse Ei kieliä"
 }

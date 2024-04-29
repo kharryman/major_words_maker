@@ -57,6 +57,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.6"
+  dropdown_multi_select:
+    dependency: "direct main"
+    description:
+      name: dropdown_multi_select
+      sha256: "457e7c906cf10322cad4675d351ec935e07531608a93df8c7215c7f1af6c2ddc"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.2"
   fake_async:
     dependency: transitive
     description:
@@ -213,6 +221,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.9.1"
+  multi_dropdown:
+    dependency: "direct main"
+    description:
+      name: multi_dropdown
+      sha256: f041373be1ff12a22b48a839911deafe2cab87617d5ed995479712dea322c169
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0"
   multiselect:
     dependency: "direct main"
     description:

@@ -68,5 +68,7 @@
     "PROMPT_SOUND_R": "Cosúil le fuaim carr tapa 4-rothaí",
     "PROMPT_SOUND_SZ": "Cuireann stailceanna 'S' nó 'Z' gach rud.",
     "PROMPT_TOOLS_WEBSITE": "Féach uirlisí eile ón suíomh Gréasáin",
-    "SELECT_LANGUAGES": "Roghnaigh Teangacha"
+    "SELECT_ALL_LANGUAGES": "Roghnaigh Gach Teanga",
+    "SELECT_LANGUAGES": "Roghnaigh Teangacha",
+    "SELECT_NO_LANGUAGES": "Roghnaigh Gan Teangacha"
 }

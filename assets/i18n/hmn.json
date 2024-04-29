@@ -68,5 +68,7 @@
     "PROMPT_SOUND_R": "Zoo li lub suab ntawm 4-wheeled ceev tsheb",
     "PROMPT_SOUND_SZ": "'S' lossis 'Z' ntaus txhua yam.",
     "PROMPT_TOOLS_WEBSITE": "Saib lwm cov cuab yeej los ntawm lub vev xaib",
-    "SELECT_LANGUAGES": "Xaiv Hom Lus"
+    "SELECT_ALL_LANGUAGES": "Xaiv Txhua Hom Lus",
+    "SELECT_LANGUAGES": "Xaiv Hom Lus",
+    "SELECT_NO_LANGUAGES": "Xaiv Tsis Muaj Hom Lus"
 }

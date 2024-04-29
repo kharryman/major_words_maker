@@ -68,5 +68,7 @@
     "PROMPT_SOUND_R": "E like me ke kani ʻana o ke kaʻa wikiwiki 4 huila",
     "PROMPT_SOUND_SZ": "'S' a 'Z' hahau i nā mea a pau.",
     "PROMPT_TOOLS_WEBSITE": "E ʻike i nā mea hana ʻē aʻe mai ka pūnaewele",
-    "SELECT_LANGUAGES": "E koho i nā ʻōlelo"
+    "SELECT_ALL_LANGUAGES": "E koho i nā ʻōlelo a pau",
+    "SELECT_LANGUAGES": "E koho i nā ʻōlelo",
+    "SELECT_NO_LANGUAGES": "E koho ʻAʻole ʻŌlelo"
 }

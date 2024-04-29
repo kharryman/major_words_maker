@@ -68,5 +68,7 @@
     "PROMPT_SOUND_R": "Como o som de um carro rápido de 4 rodas",
     "PROMPT_SOUND_SZ": "Os golpes 'S' ou 'Z' colocam tudo.",
     "PROMPT_TOOLS_WEBSITE": "Veja outras ferramentas do site",
-    "SELECT_LANGUAGES": "Selecione os idiomas"
+    "SELECT_ALL_LANGUAGES": "Selecione todos os idiomas",
+    "SELECT_LANGUAGES": "Selecione os idiomas",
+    "SELECT_NO_LANGUAGES": "Selecione Nenhum idioma"
 }

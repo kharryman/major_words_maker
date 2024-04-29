@@ -68,5 +68,7 @@
     "PROMPT_SOUND_R": "Like the sound of 4-wheeled fast car",
     "PROMPT_SOUND_SZ": "z starts with 'zero'",
     "PROMPT_TOOLS_WEBSITE": "See other tools from the website",
-    "SELECT_LANGUAGES": "Select Languages"
+    "SELECT_ALL_LANGUAGES": "Select All Languages",
+    "SELECT_LANGUAGES": "Select Languages",
+    "SELECT_NO_LANGUAGES": "Select No Languages"
 }

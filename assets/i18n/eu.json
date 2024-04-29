@@ -68,5 +68,7 @@
     "PROMPT_SOUND_R": "4 gurpileko auto azkar baten soinua bezala",
     "PROMPT_SOUND_SZ": "'S' edo 'Z' grebak dena jartzen du.",
     "PROMPT_TOOLS_WEBSITE": "Ikusi webguneko beste tresna batzuk",
-    "SELECT_LANGUAGES": "Aukeratu Hizkuntzak"
+    "SELECT_ALL_LANGUAGES": "Hautatu Hizkuntza guztiak",
+    "SELECT_LANGUAGES": "Aukeratu Hizkuntzak",
+    "SELECT_NO_LANGUAGES": "Hautatu Hizkuntzarik ez"
 }

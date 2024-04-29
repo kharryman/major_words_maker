@@ -68,5 +68,7 @@
     "PROMPT_SOUND_R": "Ca sunetul unei mașini rapide cu 4 roți",
     "PROMPT_SOUND_SZ": "Grevele „S” sau „Z” pun totul.",
     "PROMPT_TOOLS_WEBSITE": "Vedeți alte instrumente de pe site",
-    "SELECT_LANGUAGES": "Selectați Limbi"
+    "SELECT_ALL_LANGUAGES": "Selectați Toate limbile",
+    "SELECT_LANGUAGES": "Selectați Limbi",
+    "SELECT_NO_LANGUAGES": "Selectați Nicio limbă"
 }

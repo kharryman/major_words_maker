@@ -68,5 +68,7 @@
     "PROMPT_SOUND_R": "Kaip keturračio greito automobilio garsas",
     "PROMPT_SOUND_SZ": "„S“ arba „Z“ streikai sujungia viską.",
     "PROMPT_TOOLS_WEBSITE": "Peržiūrėkite kitus įrankius svetainėje",
-    "SELECT_LANGUAGES": "Pasirinkite Kalbos"
+    "SELECT_ALL_LANGUAGES": "Pasirinkite Visos kalbos",
+    "SELECT_LANGUAGES": "Pasirinkite Kalbos",
+    "SELECT_NO_LANGUAGES": "Pasirinkite Nėra kalbų"
 }

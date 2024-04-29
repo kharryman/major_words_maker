@@ -68,5 +68,7 @@
     "PROMPT_SOUND_R": "Nagu 4-rattalise kiire auto hääl",
     "PROMPT_SOUND_SZ": "\"S\" või \"Z\" löögid panevad kõik.",
     "PROMPT_TOOLS_WEBSITE": "Vaadake teisi tööriistu veebisaidilt",
-    "SELECT_LANGUAGES": "Valige Keeled"
+    "SELECT_ALL_LANGUAGES": "Valige Kõik keeled",
+    "SELECT_LANGUAGES": "Valige Keeled",
+    "SELECT_NO_LANGUAGES": "Valige keeli pole"
 }

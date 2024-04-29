@@ -68,5 +68,7 @@
     "PROMPT_SOUND_R": "Som ljudet av en 4-hjulig snabb bil",
     "PROMPT_SOUND_SZ": "'S' eller 'Z' strejker sätter allt.",
     "PROMPT_TOOLS_WEBSITE": "Se andra verktyg från webbplatsen",
-    "SELECT_LANGUAGES": "Välj Språk"
+    "SELECT_ALL_LANGUAGES": "Välj Alla språk",
+    "SELECT_LANGUAGES": "Välj Språk",
+    "SELECT_NO_LANGUAGES": "Välj Inga språk"
 }

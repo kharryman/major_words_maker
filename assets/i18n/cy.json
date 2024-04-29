@@ -68,5 +68,7 @@
     "PROMPT_SOUND_R": "Fel sŵn car cyflym 4-olwyn",
     "PROMPT_SOUND_SZ": "Mae streiciau 'S' neu 'Z' yn rhoi popeth.",
     "PROMPT_TOOLS_WEBSITE": "Gweler offer eraill o'r wefan",
-    "SELECT_LANGUAGES": "Dewiswch Ieithoedd"
+    "SELECT_ALL_LANGUAGES": "Dewiswch Pob Iaith",
+    "SELECT_LANGUAGES": "Dewiswch Ieithoedd",
+    "SELECT_NO_LANGUAGES": "Dewiswch Dim Ieithoedd"
 }

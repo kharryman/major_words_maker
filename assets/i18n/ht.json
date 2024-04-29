@@ -68,5 +68,7 @@
     "PROMPT_SOUND_R": "Tankou son an nan machin 4-wou vit",
     "PROMPT_SOUND_SZ": "'S' oswa 'Z' grèv mete tout bagay.",
     "PROMPT_TOOLS_WEBSITE": "Gade lòt zouti nan sit entènèt la",
-    "SELECT_LANGUAGES": "Chwazi Lang"
+    "SELECT_ALL_LANGUAGES": "Chwazi Tout Lang",
+    "SELECT_LANGUAGES": "Chwazi Lang",
+    "SELECT_NO_LANGUAGES": "Chwazi Pa gen Lang"
 }

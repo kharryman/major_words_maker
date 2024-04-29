@@ -68,5 +68,7 @@
     "PROMPT_SOUND_R": "Come il suono di un'auto veloce a 4 ruote",
     "PROMPT_SOUND_SZ": "I colpi \"S\" o \"Z\" mettono tutto.",
     "PROMPT_TOOLS_WEBSITE": "Vedi altri strumenti dal sito web",
-    "SELECT_LANGUAGES": "Seleziona Lingue"
+    "SELECT_ALL_LANGUAGES": "Seleziona Tutte le lingue",
+    "SELECT_LANGUAGES": "Seleziona Lingue",
+    "SELECT_NO_LANGUAGES": "Seleziona Nessuna lingua"
 }

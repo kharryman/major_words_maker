@@ -68,5 +68,7 @@
     "PROMPT_SOUND_R": "Kot zvok 4-kolesnega hitrega avtomobila",
     "PROMPT_SOUND_SZ": "Črke 'S' ali 'Z' postavijo vse.",
     "PROMPT_TOOLS_WEBSITE": "Oglejte si druga orodja s spletne strani",
-    "SELECT_LANGUAGES": "Izberite Jeziki"
+    "SELECT_ALL_LANGUAGES": "Izberite Vsi jeziki",
+    "SELECT_LANGUAGES": "Izberite Jeziki",
+    "SELECT_NO_LANGUAGES": "Izberite Brez jezikov"
 }
