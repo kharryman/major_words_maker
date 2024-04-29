@@ -174,12 +174,11 @@ class WordsPageNewState extends State<WordsPageNew> {
                                             // For example, you can navigate to a new screen or perform some other action.
                                             print("BODY UNFOCUSSING");
                                             print(
-                                                "Copy formatted word, '${MyHomePageState().formatWord(widget.words[wordKeys[i]]![j]["Word"])}' clicked!");
+                                                "Copy formatted word, '${widget.words[wordKeys[i]]![j]["formattedWord"]}' clicked!");
                                             copyToClipboard(
                                                 context,
-                                                MyHomePageState().formatWord(
-                                                    widget.words[wordKeys[i]]![
-                                                        j]["Word"]));
+                                                widget.words[wordKeys[i]]![j]
+                                                    ["formattedWord"]);
                                           },
                                           child: SizedBox(
                                             width: MediaQuery.of(context)
@@ -187,7 +186,7 @@ class WordsPageNewState extends State<WordsPageNew> {
                                                     .width *
                                                 .15,
                                             child: Text(
-                                              "( ${MyHomePageState().formatWord(widget.words[wordKeys[i]]![j]["Word"])} )",
+                                              "( ${widget.words[wordKeys[i]]![j]["formattedWord"]} )",
                                               softWrap: true,
                                               style: TextStyle(fontSize: 10.0),
                                             ),

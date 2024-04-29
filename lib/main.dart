@@ -307,7 +307,8 @@ class MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     isLanguagesLoading = true;
-    selectedMajorLanguage = languages[0];
+    //DEFAULT TO ENGLISH:
+    selectedMajorLanguage = languages[6];
     if (kIsWeb == false) {
       createInterstitialAd();
     }
@@ -558,6 +559,7 @@ class MyHomePageState extends State<MyHomePage> {
         if (dictNum.length >= lastNumber.length) {
           if (dictNum.substring(0, lastNumber.length) == lastNumber) {
             formattedWord = formatWord(words[j]);
+            print("formattedWOrd = $formattedWord");
             filteredWords
                 .add([words[j], formattedWord, dicObj[words[j]]!.elementAt(1)]);
           }
@@ -646,6 +648,13 @@ class MyHomePageState extends State<MyHomePage> {
         int countTotal = data["COUNT_TOTAL"];
         if (countWords > 0) {
           gotMajorWords = Map<String, List<dynamic>>.from(data["WORDS"]);
+          List<String> LIDs = gotMajorWords.keys.toList();
+          for (int i = 0; i < LIDs.length; i++) {
+            for (int j = 0; j < gotMajorWords[LIDs[i]]!.length; j++) {
+              gotMajorWords[LIDs[i]]![j]["formattedWord"] =
+                  formatWord(gotMajorWords[LIDs[i]]![j]["Word"]);
+            }
+          }
         } else {
           gotMajorWords = {};
         }
@@ -771,6 +780,7 @@ class MyHomePageState extends State<MyHomePage> {
       selectedMajorLanguage = List<dynamic>.from(languages
           .where((dynamic lang) => lang["value"] == savedLanguage)
           .toList())[0];
+      print("selectedMajorLanguage = ${json.encode(selectedMajorLanguage)}");
       try {
         if (context != null) {
           FlutterI18n.refresh(context, Locale(savedLanguage));
@@ -781,6 +791,7 @@ class MyHomePageState extends State<MyHomePage> {
     } else {
       //FlutterI18n.refresh(context, Locale('en'));
     }
+    //setState((){});
   }
 
 /*
