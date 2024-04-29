@@ -36,6 +36,8 @@ import 'package:multiselect/multiselect.dart';
 import 'package:multiselect_dropdown_flutter/multiselect_dropdown_flutter.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
 
+import 'package:connectivity/connectivity.dart';
+
 //import 'package:flutter_native_splash/flutter_native_splash.dart';
 //import 'package:device_info/device_info.dart';
 
@@ -313,8 +315,28 @@ class MyHomePageState extends State<MyHomePage> {
       createInterstitialAd();
     }
     setSavedLanguage(null);
-    //setAvailLanguages();
-    setAvailLanguages();
+    Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+      bool isOnline = result != ConnectivityResult.none;
+      doNetworkChange(isOnline);
+    });
+    Connectivity().checkConnectivity().then((ConnectivityResult result) {
+      print("Main initState Connectivity RESOLVED result = $result");
+      bool isOnline = result != ConnectivityResult.none;
+      doNetworkChange(isOnline);
+    });
+  }
+
+  doNetworkChange(bool isOnline) {
+    if (isOnline == false) {
+      setState(() {
+        print("OFFLINE...");
+        isLanguagesLoading = false;
+        myList = ["English(English)"];
+        myFilteredLanguages = ["English(English)"];
+      });
+    } else {
+      setAvailLanguages();
+    }
   }
 
 /*
@@ -372,35 +394,44 @@ class MyHomePageState extends State<MyHomePage> {
     dynamic data = {"SUCCESS": false};
     bool isSuccess = true;
     List<dynamic> gotLanguages = [];
-    final response = await http.get(Uri.parse(
-        'https://www.learnfactsquick.com/lfq_app_php/get_dict_langs.php'));
-    //hideProgress(context);
-    if (response.statusCode == 200) {
-      data = Map<String, dynamic>.from(json.decode(response.body));
-      print("GET AVAIL LANGUAGES data = ${json.encode(data)}");
-      if (data["SUCCESS"] == true) {
-        print("GOT LANGUAGES = ${json.encode(data)}");
-        gotLanguages = data["LANGUAGES"];
-      } else {
-        print("GET LANGUAGES ERROR: ${data["ERROR"]}");
-        isSuccess = false;
-        //showPopup(context, data["ERROR"]);
-      }
-    } else {
-      showPopup(context, FlutterI18n.translate(context, "NETWORK_ERROR"));
-    }
-    setState(() {
-      isLanguagesLoading = false;
-      if (isSuccess == true) {
-        dynamic availLang;
-        for (int i = 0; i < gotLanguages.length; i++) {
-          availLang = (MyHomePageState().languages.where((dynamic language) =>
-              language["value"] == gotLanguages[i]["Code"])).toList()[0];
-          availLanguages.add(availLang);
+    try {
+      final response = await http.get(Uri.parse(
+          'https://www.learnfactsquick.com/lfq_app_php/get_dict_langs.php'));
+      //hideProgress(context);
+      if (response.statusCode == 200) {
+        data = Map<String, dynamic>.from(json.decode(response.body));
+        print("GET AVAIL LANGUAGES data = ${json.encode(data)}");
+        if (data["SUCCESS"] == true) {
+          print("GOT LANGUAGES = ${json.encode(data)}");
+          gotLanguages = data["LANGUAGES"];
+        } else {
+          print("GET LANGUAGES ERROR: ${data["ERROR"]}");
+          isSuccess = false;
+          //showPopup(context, data["ERROR"]);
         }
-        resetMyList();
+      } else {
+        showPopup(context, FlutterI18n.translate(context, "NETWORK_ERROR"));
       }
-    });
+      setState(() {
+        isLanguagesLoading = false;
+        if (isSuccess == true) {
+          dynamic availLang;
+          for (int i = 0; i < gotLanguages.length; i++) {
+            availLang = (MyHomePageState().languages.where((dynamic language) =>
+                language["value"] == gotLanguages[i]["Code"])).toList()[0];
+            availLanguages.add(availLang);
+          }
+          resetMyList();
+        }
+      });
+    } catch (e) {
+      setState(() {
+        isLanguagesLoading = false;
+        print("setAvailLanguages OFFLINE...");
+        myList = ["English(English)"];
+        myFilteredLanguages = ["English(English)"];
+      });
+    }
   }
 
   Future<void> showPopup(BuildContext context, String message) async {
