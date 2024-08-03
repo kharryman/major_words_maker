@@ -1,5 +1,6 @@
 {
     "APP_TITLE": "Major Words Maker",
+    "COPIED": "copied to clipboard",
     "ENTER_NUMBERS": "Enter numbers",
     "HELP1": "The Major Sytem is a digit to consonant memory tool.",
     "HELP2": "Each digit is represented by a set of similar sounding consonants.",
@@ -49,6 +50,7 @@
     "LANGUAGE_VIETNAMESE": "Vietnamese",
     "LANGUAGE_WELSH": "Welsh",
     "MAKE_MAJOR_WORDS": "Make Major Words",
+    "PROGRESS_MAKE_MAJOR": "Making major words...",
     "PROMPT_ALL": "All",
     "PROMPT_APPS_APP_STORE": "See other apps from the App Store",
     "PROMPT_APPS_PLAY_STORE": "See other apps from the Play Store",

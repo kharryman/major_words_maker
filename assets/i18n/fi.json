@@ -1,5 +1,6 @@
 {
     "APP_TITLE": "Tärkeä sanojen tekijä",
+    "COPIED": "kopioitu leikepöydälle",
     "ENTER_NUMBERS": "Syötä numerot",
     "HELP1": "Major Sytem on numerosta konsonantiksi -muistityökalu.",
     "HELP2": "Jokaista numeroa edustaa joukko samankaltaisia äänisiä konsonantteja.",
@@ -49,6 +50,7 @@
     "LANGUAGE_VIETNAMESE": "vietnam",
     "LANGUAGE_WELSH": "Walesin",
     "MAKE_MAJOR_WORDS": "Tee tärkeitä sanoja",
+    "PROGRESS_MAKE_MAJOR": "Tärkeitä sanoja tekemässä...",
     "PROMPT_ALL": "Kaikki",
     "PROMPT_APPS_APP_STORE": "Katso muut sovellukset App Storesta",
     "PROMPT_APPS_PLAY_STORE": "Katso muita sovelluksia Play Kaupasta",

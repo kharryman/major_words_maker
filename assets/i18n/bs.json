@@ -1,5 +1,6 @@
 {
     "APP_TITLE": "Major Words Maker",
+    "COPIED": "kopirano u međuspremnik",
     "ENTER_NUMBERS": "Unesite brojeve",
     "HELP1": "Glavni sistem je alat za memorisanje cifara do suglasnika.",
     "HELP2": "Svaka cifra je predstavljena skupom sličnih suglasnika.",
@@ -49,6 +50,7 @@
     "LANGUAGE_VIETNAMESE": "Vijetnamski",
     "LANGUAGE_WELSH": "Velški",
     "MAKE_MAJOR_WORDS": "Napravite glavne riječi",
+    "PROGRESS_MAKE_MAJOR": "Pravljenje glavnih riječi...",
     "PROMPT_ALL": "Sve",
     "PROMPT_APPS_APP_STORE": "Pogledajte druge aplikacije iz App Store-a",
     "PROMPT_APPS_PLAY_STORE": "Pogledajte druge aplikacije iz Play trgovine",

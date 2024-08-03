@@ -1,5 +1,6 @@
 {
     "APP_TITLE": "Creador de palabras principales",
+    "COPIED": "Copiado al portapapeles",
     "ENTER_NUMBERS": "Introducir números",
     "HELP1": "El sistema mayor es una herramienta de memoria de dígitos a consonantes.",
     "HELP2": "Cada dígito está representado por un conjunto de consonantes que suenan similares.",
@@ -49,6 +50,7 @@
     "LANGUAGE_VIETNAMESE": "vietnamita",
     "LANGUAGE_WELSH": "Galés",
     "MAKE_MAJOR_WORDS": "hacer palabras importantes",
+    "PROGRESS_MAKE_MAJOR": "Haciendo palabras importantes...",
     "PROMPT_ALL": "Todo",
     "PROMPT_APPS_APP_STORE": "Ver otras aplicaciones de la App Store",
     "PROMPT_APPS_PLAY_STORE": "Ver otras aplicaciones de Play Store",

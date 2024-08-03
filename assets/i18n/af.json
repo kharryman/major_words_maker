@@ -1,5 +1,6 @@
 {
     "APP_TITLE": "Groot Woorde Maker",
+    "COPIED": "na knipbord gekopieer",
     "ENTER_NUMBERS": "Voer nommers in",
     "HELP1": "Die hoofstelsel is 'n syfer-na-konsonant-geheue-instrument.",
     "HELP2": "Elke syfer word voorgestel deur 'n stel soortgelyke klinkende konsonante.",
@@ -49,6 +50,7 @@
     "LANGUAGE_VIETNAMESE": "Viëtnamees",
     "LANGUAGE_WELSH": "Wallies",
     "MAKE_MAJOR_WORDS": "Maak hoofwoorde",
+    "PROGRESS_MAKE_MAJOR": "Maak groot woorde...",
     "PROMPT_ALL": "Almal",
     "PROMPT_APPS_APP_STORE": "Sien ander toepassings vanaf die App Store",
     "PROMPT_APPS_PLAY_STORE": "Sien ander toepassings in die Play Winkel",

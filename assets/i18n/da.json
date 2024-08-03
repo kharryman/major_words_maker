@@ -1,5 +1,6 @@
 {
     "APP_TITLE": "Major Words Maker",
+    "COPIED": "kopieret til udklipsholder",
     "ENTER_NUMBERS": "Indtast tal",
     "HELP1": "Major-systemet er et ciffer-til-konsonant-hukommelsesværktøj.",
     "HELP2": "Hvert ciffer er repræsenteret af et sæt af lignende klingende konsonanter.",
@@ -49,6 +50,7 @@
     "LANGUAGE_VIETNAMESE": "vietnamesisk",
     "LANGUAGE_WELSH": "Walisisk",
     "MAKE_MAJOR_WORDS": "Lav store ord",
+    "PROGRESS_MAKE_MAJOR": "Lave store ord...",
     "PROMPT_ALL": "Alle",
     "PROMPT_APPS_APP_STORE": "Se andre apps fra App Store",
     "PROMPT_APPS_PLAY_STORE": "Se andre apps fra Play Butik",

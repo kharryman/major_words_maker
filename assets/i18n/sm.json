@@ -1,5 +1,6 @@
 {
     "APP_TITLE": "Fai upu tetele",
+    "COPIED": "kopi i le laupapa kilipa",
     "ENTER_NUMBERS": "Ulufale numera",
     "HELP1": "Ole Major Sytem ole numera ile consonant memory tool.",
     "HELP2": "O numera ta'itasi o lo'o fa'atusalia e se seti o konesane fa'alogo tutusa.",
@@ -49,6 +50,7 @@
     "LANGUAGE_VIETNAMESE": "Vietnamese",
     "LANGUAGE_WELSH": "Uelese",
     "MAKE_MAJOR_WORDS": "Fai upu tetele",
+    "PROGRESS_MAKE_MAJOR": "Faia o upu tetele...",
     "PROMPT_ALL": "O mea uma",
     "PROMPT_APPS_APP_STORE": "Va'ai isi polokalame mai le App Store",
     "PROMPT_APPS_PLAY_STORE": "Va'ai isi polokalame mai le Play Store",

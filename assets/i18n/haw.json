@@ -1,5 +1,6 @@
 {
     "APP_TITLE": "Mea Hana Hua'ōlelo Nui",
+    "COPIED": "kope ʻia i ka papa paʻi",
     "ENTER_NUMBERS": "E hoʻokomo i nā helu",
     "HELP1": "ʻO ka Major Sytem kahi huahelu i ka mea hoʻomanaʻo consonant.",
     "HELP2": "Hōʻike ʻia kēlā me kēia huahelu e kahi pūʻulu o nā consonants kani like.",
@@ -49,6 +50,7 @@
     "LANGUAGE_VIETNAMESE": "Vietnamese",
     "LANGUAGE_WELSH": "Welsh",
     "MAKE_MAJOR_WORDS": "Hana i nā ʻōlelo nui",
+    "PROGRESS_MAKE_MAJOR": "Ke hana nei i nā ʻōlelo nui ...",
     "PROMPT_ALL": "ʻO nā mea a pau",
     "PROMPT_APPS_APP_STORE": "E ʻike i nā polokalamu ʻē aʻe mai ka App Store",
     "PROMPT_APPS_PLAY_STORE": "E ʻike i nā polokalamu ʻē aʻe mai ka Play Store",

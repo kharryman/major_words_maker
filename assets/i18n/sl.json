@@ -1,5 +1,6 @@
 {
     "APP_TITLE": "Major Words Maker",
+    "COPIED": "kopirano v odložišče",
     "ENTER_NUMBERS": "Vnesite številke",
     "HELP1": "Major System je orodje za pomnjenje števk v soglasnike.",
     "HELP2": "Vsaka števka je predstavljena z nizom podobnih zvenečih soglasnikov.",
@@ -49,6 +50,7 @@
     "LANGUAGE_VIETNAMESE": "vietnamski",
     "LANGUAGE_WELSH": "Valižanščina",
     "MAKE_MAJOR_WORDS": "Naredi glavne besede",
+    "PROGRESS_MAKE_MAJOR": "Ustvarjanje glavnih besed ...",
     "PROMPT_ALL": "Vse",
     "PROMPT_APPS_APP_STORE": "Oglejte si druge aplikacije iz App Store",
     "PROMPT_APPS_PLAY_STORE": "Oglejte si druge aplikacije iz Trgovine Play",

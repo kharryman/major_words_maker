@@ -1,5 +1,6 @@
 {
     "APP_TITLE": "Kaihanga Kupu Nui",
+    "COPIED": "kua tāruatia ki te papatopenga",
     "ENTER_NUMBERS": "Whakauruhia nga nama",
     "HELP1": "Ko te Major Sytem he mati ki te taputapu mahara orokati.",
     "HELP2": "Ka tohuhia ia mati e te huinga orokati tangi rite.",
@@ -49,6 +50,7 @@
     "LANGUAGE_VIETNAMESE": "Vietnamese",
     "LANGUAGE_WELSH": "Welsh",
     "MAKE_MAJOR_WORDS": "Hanga Kupu Nui",
+    "PROGRESS_MAKE_MAJOR": "Te hanga kupu nui...",
     "PROMPT_ALL": "Katoa",
     "PROMPT_APPS_APP_STORE": "Tirohia etahi atu taupānga mai i te Toa App",
     "PROMPT_APPS_PLAY_STORE": "Tirohia etahi atu taupānga mai i te Toa Play",

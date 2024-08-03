@@ -1,5 +1,6 @@
 {
     "APP_TITLE": "Pembuat Kata Utama",
+    "COPIED": "disalin ke papan keratan",
     "ENTER_NUMBERS": "Masukkan nombor",
     "HELP1": "Sistem Utama ialah alat ingatan digit kepada konsonan.",
     "HELP2": "Setiap digit diwakili oleh satu set konsonan bunyi yang serupa.",
@@ -49,6 +50,7 @@
     "LANGUAGE_VIETNAMESE": "bahasa Vietnam",
     "LANGUAGE_WELSH": "Bahasa Wales",
     "MAKE_MAJOR_WORDS": "Buat Perkataan Utama",
+    "PROGRESS_MAKE_MAJOR": "Membuat perkataan utama...",
     "PROMPT_ALL": "Semua",
     "PROMPT_APPS_APP_STORE": "Lihat apl lain daripada App Store",
     "PROMPT_APPS_PLAY_STORE": "Lihat apl lain daripada Gedung Play",

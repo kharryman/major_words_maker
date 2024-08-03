@@ -1,5 +1,6 @@
 {
     "APP_TITLE": "Peamine sõnade tegija",
+    "COPIED": "lõikelauale kopeeritud",
     "ENTER_NUMBERS": "Sisestage numbrid",
     "HELP1": "Peamine süsteem on mälutööriist numbritest kaashäälikuteks.",
     "HELP2": "Iga numbrit esindab sarnase kõlaga konsonantide komplekt.",
@@ -49,6 +50,7 @@
     "LANGUAGE_VIETNAMESE": "vietnamlane",
     "LANGUAGE_WELSH": "Kõmri",
     "MAKE_MAJOR_WORDS": "Tehke olulisi sõnu",
+    "PROGRESS_MAKE_MAJOR": "Peamiste sõnade tegemine...",
     "PROMPT_ALL": "Kõik",
     "PROMPT_APPS_APP_STORE": "Vaadake muid rakendusi App Store'ist",
     "PROMPT_APPS_PLAY_STORE": "Vaadake teisi rakendusi Play poest",

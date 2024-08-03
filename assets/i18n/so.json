@@ -1,5 +1,6 @@
 {
     "APP_TITLE": "Erayada waaweyn Sameeyaha",
+    "COPIED": "loo guuriyay sabuuraddii",
     "ENTER_NUMBERS": "Geli nambarada",
     "HELP1": "Habka Wayn waa lambar ilaa qalab xusuusta shibbane.",
     "HELP2": "Nambar kasta waxa u taagan shibbanayaal dhawaqaya oo isku mid ah.",
@@ -49,6 +50,7 @@
     "LANGUAGE_VIETNAMESE": "Vietnamese",
     "LANGUAGE_WELSH": "Welsh",
     "MAKE_MAJOR_WORDS": "Samee Erayo Waaweyn",
+    "PROGRESS_MAKE_MAJOR": "Samaynta ereyo waaweyn...",
     "PROMPT_ALL": "Dhammaan",
     "PROMPT_APPS_APP_STORE": "Ka eeg abka kale ee App Store",
     "PROMPT_APPS_PLAY_STORE": "Ka arag apps kale Play Store",

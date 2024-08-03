@@ -1,5 +1,6 @@
 {
     "APP_TITLE": "Maggiore creatore di parole",
+    "COPIED": "copiato negli appunti",
     "ENTER_NUMBERS": "Inserisci i numeri",
     "HELP1": "Il Major Sytem è uno strumento di memoria da cifre a consonanti.",
     "HELP2": "Ogni cifra è rappresentata da un insieme di consonanti dal suono simile.",
@@ -49,6 +50,7 @@
     "LANGUAGE_VIETNAMESE": "vietnamita",
     "LANGUAGE_WELSH": "Gallese",
     "MAKE_MAJOR_WORDS": "Crea parole importanti",
+    "PROGRESS_MAKE_MAJOR": "Fare parole importanti...",
     "PROMPT_ALL": "Tutto",
     "PROMPT_APPS_APP_STORE": "Scopri altre app dall'App Store",
     "PROMPT_APPS_PLAY_STORE": "Visualizza altre app dal Play Store",

@@ -1,5 +1,6 @@
 {
     "APP_TITLE": "Criador de palavras principais",
+    "COPIED": "Copiado para a área de transferência",
     "ENTER_NUMBERS": "Insira números",
     "HELP1": "O sistema principal é uma ferramenta de memória de dígito para consoante.",
     "HELP2": "Cada dígito é representado por um conjunto de consoantes com sons semelhantes.",
@@ -49,6 +50,7 @@
     "LANGUAGE_VIETNAMESE": "vietnamita",
     "LANGUAGE_WELSH": "Galês",
     "MAKE_MAJOR_WORDS": "Faça palavras importantes",
+    "PROGRESS_MAKE_MAJOR": "Fazendo palavras importantes...",
     "PROMPT_ALL": "Todos",
     "PROMPT_APPS_APP_STORE": "Veja outros aplicativos da App Store",
     "PROMPT_APPS_PLAY_STORE": "Veja outros aplicativos da Play Store",

@@ -1,5 +1,6 @@
 {
     "APP_TITLE": "Izrađivač glavnih riječi",
+    "COPIED": "kopirano u međuspremnik",
     "ENTER_NUMBERS": "Unesite brojeve",
     "HELP1": "Glavni sustav je alat za pamćenje suglasnika.",
     "HELP2": "Svaka znamenka je predstavljena skupom suglasnika sličnog zvuka.",
@@ -49,6 +50,7 @@
     "LANGUAGE_VIETNAMESE": "vijetnamski",
     "LANGUAGE_WELSH": "Velški",
     "MAKE_MAJOR_WORDS": "Napravi glavne riječi",
+    "PROGRESS_MAKE_MAJOR": "Izrada glavnih riječi...",
     "PROMPT_ALL": "svi",
     "PROMPT_APPS_APP_STORE": "Pogledajte druge aplikacije iz App Storea",
     "PROMPT_APPS_PLAY_STORE": "Pogledajte druge aplikacije iz Trgovine Play",

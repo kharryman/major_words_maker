@@ -1,5 +1,6 @@
 {
     "APP_TITLE": "Major Words Maker",
+    "COPIED": "theej rau daim ntawv teev cia",
     "ENTER_NUMBERS": "Sau tus lej",
     "HELP1": "Major System yog ib tug lej rau consonant nco cuab tam.",
     "HELP2": "Txhua tus lej yog sawv cev los ntawm ib pawg ntawm cov suab zoo sib xws.",
@@ -49,6 +50,7 @@
     "LANGUAGE_VIETNAMESE": "Nyab Laj",
     "LANGUAGE_WELSH": "Welsh",
     "MAKE_MAJOR_WORDS": "Ua Cov Lus Loj",
+    "PROGRESS_MAKE_MAJOR": "Ua cov lus tseem ceeb...",
     "PROMPT_ALL": "Tag nrho",
     "PROMPT_APPS_APP_STORE": "Saib lwm cov apps los ntawm App Store",
     "PROMPT_APPS_PLAY_STORE": "Saib lwm cov apps los ntawm Play Store",

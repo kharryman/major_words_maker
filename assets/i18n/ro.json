@@ -1,5 +1,6 @@
 {
     "APP_TITLE": "Major Words Maker",
+    "COPIED": "copiat în clipboard",
     "ENTER_NUMBERS": "Introduceți numere",
     "HELP1": "Major Sytem este un instrument de memorie de la cifre la consoane.",
     "HELP2": "Fiecare cifră este reprezentată de un set de consoane similare.",
@@ -49,6 +50,7 @@
     "LANGUAGE_VIETNAMESE": "vietnamez",
     "LANGUAGE_WELSH": "Galeză",
     "MAKE_MAJOR_WORDS": "Faceți cuvinte majore",
+    "PROGRESS_MAKE_MAJOR": "Făcând cuvinte majore...",
     "PROMPT_ALL": "Toate",
     "PROMPT_APPS_APP_STORE": "Vedeți alte aplicații din App Store",
     "PROMPT_APPS_PLAY_STORE": "Vedeți alte aplicații din Magazinul Play",

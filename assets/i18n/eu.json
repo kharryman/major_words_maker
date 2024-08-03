@@ -1,5 +1,6 @@
 {
     "APP_TITLE": "Major Words Maker",
+    "COPIED": "arbelean kopiatu da",
     "ENTER_NUMBERS": "Sartu zenbakiak",
     "HELP1": "Major Sytem digitetik kontsonanteen memoria tresna da.",
     "HELP2": "Zifra bakoitza antzeko soinudun kontsonante multzo batek adierazten du.",
@@ -49,6 +50,7 @@
     "LANGUAGE_VIETNAMESE": "Vietnamera",
     "LANGUAGE_WELSH": "Galesera",
     "MAKE_MAJOR_WORDS": "Egin hitz nagusiak",
+    "PROGRESS_MAKE_MAJOR": "Hitz nagusiak egiten...",
     "PROMPT_ALL": "Denak",
     "PROMPT_APPS_APP_STORE": "Ikusi App Store-ko beste aplikazio batzuk",
     "PROMPT_APPS_PLAY_STORE": "Ikusi Play Store-ko beste aplikazio batzuk",

@@ -1,5 +1,6 @@
 {
     "APP_TITLE": "Główny twórca słów",
+    "COPIED": "skopiowane do schowka",
     "ENTER_NUMBERS": "Wprowadź liczby",
     "HELP1": "Główny system to narzędzie do zapamiętywania cyfr i spółgłosek.",
     "HELP2": "Każda cyfra jest reprezentowana przez zestaw podobnie brzmiących spółgłosek.",
@@ -49,6 +50,7 @@
     "LANGUAGE_VIETNAMESE": "wietnamski",
     "LANGUAGE_WELSH": "Walijski",
     "MAKE_MAJOR_WORDS": "Twórz najważniejsze słowa",
+    "PROGRESS_MAKE_MAJOR": "Tworzenie najważniejszych słów...",
     "PROMPT_ALL": "Wszystko",
     "PROMPT_APPS_APP_STORE": "Zobacz inne aplikacje ze sklepu App Store",
     "PROMPT_APPS_PLAY_STORE": "Zobacz inne aplikacje ze Sklepu Play",

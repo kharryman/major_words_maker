@@ -1,5 +1,6 @@
 {
     "APP_TITLE": "Créateur de mots majeurs",
+    "COPIED": "copié dans le presse-papier",
     "ENTER_NUMBERS": "Entrez des chiffres",
     "HELP1": "Le système majeur est un outil de mémoire de chiffres à consonnes.",
     "HELP2": "Chaque chiffre est représenté par un ensemble de consonnes à consonance similaire.",
@@ -49,6 +50,7 @@
     "LANGUAGE_VIETNAMESE": "vietnamien",
     "LANGUAGE_WELSH": "Gallois",
     "MAKE_MAJOR_WORDS": "Faire des mots majeurs",
+    "PROGRESS_MAKE_MAJOR": "Faire des mots majeurs...",
     "PROMPT_ALL": "Tous",
     "PROMPT_APPS_APP_STORE": "Voir d'autres applications de l'App Store",
     "PROMPT_APPS_PLAY_STORE": "Voir d'autres applications du Play Store",

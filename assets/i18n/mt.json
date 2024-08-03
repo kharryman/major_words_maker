@@ -1,5 +1,6 @@
 {
     "APP_TITLE": "Kliem Maġġuri Maker",
+    "COPIED": "ikkupjat fil-clipboard",
     "ENTER_NUMBERS": "Daħħal in-numri",
     "HELP1": "Is-Sistema Maġġuri hija għodda tal-memorja minn ċifra għal konsonanti.",
     "HELP2": "Kull ċifra hija rappreżentata minn sett ta 'konsonanti li jħossu simili.",
@@ -49,6 +50,7 @@
     "LANGUAGE_VIETNAMESE": "Vjetnamiż",
     "LANGUAGE_WELSH": "Welsh",
     "MAKE_MAJOR_WORDS": "Agħmel Kliem Maġġuri",
+    "PROGRESS_MAKE_MAJOR": "Nagħmlu kliem ewlieni...",
     "PROMPT_ALL": "Kollha",
     "PROMPT_APPS_APP_STORE": "Ara apps oħra mill-App Store",
     "PROMPT_APPS_PLAY_STORE": "Ara apps oħra mill-Play Store",

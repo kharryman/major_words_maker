@@ -1,5 +1,6 @@
 {
     "APP_TITLE": "Wichtige Wörtergeneratoren",
+    "COPIED": "in die Zwischenablage kopiert",
     "ENTER_NUMBERS": "Zahlen eingeben",
     "HELP1": "Das Dursystem ist ein Gedächtnistool zum Lernen von Ziffern und Konsonanten.",
     "HELP2": "Jede Ziffer wird durch eine Reihe ähnlich klingender Konsonanten dargestellt.",
@@ -49,6 +50,7 @@
     "LANGUAGE_VIETNAMESE": "Vietnamesisch",
     "LANGUAGE_WELSH": "Walisisch",
     "MAKE_MAJOR_WORDS": "Bilden Sie wichtige Wörter",
+    "PROGRESS_MAKE_MAJOR": "Wichtige Wörter bilden ...",
     "PROMPT_ALL": "Alle",
     "PROMPT_APPS_APP_STORE": "Weitere Apps aus dem App Store anzeigen",
     "PROMPT_APPS_PLAY_STORE": "Weitere Apps aus dem Play Store anzeigen",

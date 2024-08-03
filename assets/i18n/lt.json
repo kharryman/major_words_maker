@@ -1,5 +1,6 @@
 {
     "APP_TITLE": "Pagrindinis žodžių kūrėjas",
+    "COPIED": "nukopijuota į mainų sritį",
     "ENTER_NUMBERS": "Įveskite skaičius",
     "HELP1": "Pagrindinė sistema yra atminties įrankis iš skaitmens į priebalsį.",
     "HELP2": "Kiekvienas skaitmuo yra pavaizduotas panašiai skambančių priebalsių rinkiniu.",
@@ -49,6 +50,7 @@
     "LANGUAGE_VIETNAMESE": "vietnamiečių",
     "LANGUAGE_WELSH": "Valų",
     "MAKE_MAJOR_WORDS": "Padarykite pagrindinius žodžius",
+    "PROGRESS_MAKE_MAJOR": "Pasakyti pagrindinius žodžius...",
     "PROMPT_ALL": "Visi",
     "PROMPT_APPS_APP_STORE": "Peržiūrėkite kitas programas iš „App Store“.",
     "PROMPT_APPS_PLAY_STORE": "Peržiūrėkite kitas programas iš „Play“ parduotuvės",

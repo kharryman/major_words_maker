@@ -1,5 +1,6 @@
 {
     "APP_TITLE": "Tvorca hlavných slov",
+    "COPIED": "skopírované do schránky",
     "ENTER_NUMBERS": "Zadajte čísla",
     "HELP1": "Major Sytem je nástroj na zapamätanie číslic na spoluhlásku.",
     "HELP2": "Každá číslica je reprezentovaná množinou podobne znejúcich spoluhlások.",
@@ -49,6 +50,7 @@
     "LANGUAGE_VIETNAMESE": "Vietnamci",
     "LANGUAGE_WELSH": "Waleský",
     "MAKE_MAJOR_WORDS": "Tvorte hlavné slová",
+    "PROGRESS_MAKE_MAJOR": "Vytváranie hlavných slov...",
     "PROMPT_ALL": "Všetky",
     "PROMPT_APPS_APP_STORE": "Pozrite si ďalšie aplikácie z App Store",
     "PROMPT_APPS_PLAY_STORE": "Pozrite si ďalšie aplikácie z Obchodu Play",

@@ -1,5 +1,6 @@
 {
     "APP_TITLE": "Major Words Maker",
+    "COPIED": "kopieras till urklipp",
     "ENTER_NUMBERS": "Ange siffror",
     "HELP1": "Major System är ett siffra till konsonant minnesverktyg.",
     "HELP2": "Varje siffra representeras av en uppsättning liknande konsonanter.",
@@ -49,6 +50,7 @@
     "LANGUAGE_VIETNAMESE": "vietnamesiska",
     "LANGUAGE_WELSH": "Walesiska",
     "MAKE_MAJOR_WORDS": "Gör stora ord",
+    "PROGRESS_MAKE_MAJOR": "Gör stora ord...",
     "PROMPT_ALL": "Allt",
     "PROMPT_APPS_APP_STORE": "Se andra appar från App Store",
     "PROMPT_APPS_PLAY_STORE": "Se andra appar från Play Butik",
