@@ -63,7 +63,19 @@ class WordsPageNewState extends State<WordsPageNew> {
     double big2FontSize =
         (screenWidth * 0.016 + 4) < 11 ? 11 : (screenWidth * 0.016 + 4);
     //final appBarHeight = (appBarKey.currentContext!.findRenderObject() as RenderBox).size.height;
-    double promptTitleHeight = 120;
+    final PreferredSizeWidget appBar = AppBar(
+      key: appBarKey,
+      backgroundColor: Colors.grey,
+      title: Text(
+        FlutterI18n.translate(context, "PROMPT_MAJOR_WORDS"),
+        style: TextStyle(fontSize: titleFontSize),
+      ),
+      actions: <Widget>[
+        Menu(context: context, page: 'main', updateParent: updateSelf)
+      ],
+    );
+    final double appBarHeight = appBar.preferredSize.height;
+    double promptTitleHeight = appBarHeight;
     double promptFoundHeight = 70;
     double promptLanguageHeight = 45;
     List<String> wordKeys = List<String>.from(widget.words.keys);
@@ -247,17 +259,7 @@ class WordsPageNewState extends State<WordsPageNew> {
           return true; // Return false to prevent popping the route
         },
         child: Scaffold(
-            appBar: AppBar(
-              key: appBarKey,
-              backgroundColor: Colors.grey,
-              title: Text(
-                FlutterI18n.translate(context, "PROMPT_MAJOR_WORDS"),
-                style: TextStyle(fontSize: titleFontSize),
-              ),
-              actions: <Widget>[
-                Menu(context: context, page: 'main', updateParent: updateSelf)
-              ],
-            ),
+            appBar: appBar,
             body: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
