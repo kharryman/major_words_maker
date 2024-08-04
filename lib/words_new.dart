@@ -24,6 +24,8 @@ class WordsPageNew extends StatefulWidget {
 }
 
 class WordsPageNewState extends State<WordsPageNew> {
+  GlobalKey appBarKey = GlobalKey();
+
   copyToClipboard(context, myText) {
     Clipboard.setData(ClipboardData(text: myText));
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -60,6 +62,10 @@ class WordsPageNewState extends State<WordsPageNew> {
         (screenWidth * 0.018 + 4) < 15 ? 15 : (screenWidth * 0.018 + 4);
     double big2FontSize =
         (screenWidth * 0.016 + 4) < 11 ? 11 : (screenWidth * 0.016 + 4);
+    //final appBarHeight = (appBarKey.currentContext!.findRenderObject() as RenderBox).size.height;
+    double promptTitleHeight = 120;
+    double promptFoundHeight = 70;
+    double promptLanguageHeight = 45;
     List<String> wordKeys = List<String>.from(widget.words.keys);
     Map<int, TableColumnWidth> myColumnWidths = {};
     List<Widget> widgetLanguageHeaderList = [];
@@ -73,13 +79,17 @@ class WordsPageNewState extends State<WordsPageNew> {
       widgetLanguageHeaderList.add(TableCell(
           child: Container(
               width: columnWidth,
+              height: promptLanguageHeight,
               padding: EdgeInsets.all(2.0),
               decoration: BoxDecoration(
                   border: Border.all(color: Colors.black), color: Colors.white),
-              child: Text(
-                  "${getLanguage(context, wordKeys[i])}(${widget.words[wordKeys[i]]!.length})",
-                  style: TextStyle(
-                      fontSize: big2FontSize, fontWeight: FontWeight.bold)))));
+              child: Align(
+                alignment: Alignment.center,
+                child: Text(
+                    "${getLanguage(context, wordKeys[i])}(${widget.words[wordKeys[i]]!.length})",
+                    style: TextStyle(
+                        fontSize: big2FontSize, fontWeight: FontWeight.bold)),
+              ))));
 
       widgetMajorList.add(TableCell(
           child: Column(
@@ -87,7 +97,10 @@ class WordsPageNewState extends State<WordsPageNew> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-              height: ((screenHeight * 0.79) - (screenWidth * 0.025)),
+              height: (screenHeight -
+                  promptTitleHeight -
+                  promptFoundHeight -
+                  promptLanguageHeight),
               padding: EdgeInsets.all(2.0),
               decoration: BoxDecoration(
                   border: Border.all(color: Colors.black), color: Colors.white),
@@ -235,6 +248,7 @@ class WordsPageNewState extends State<WordsPageNew> {
         },
         child: Scaffold(
             appBar: AppBar(
+              key: appBarKey,
               backgroundColor: Colors.grey,
               title: Text(
                 FlutterI18n.translate(context, "PROMPT_MAJOR_WORDS"),
@@ -250,19 +264,23 @@ class WordsPageNewState extends State<WordsPageNew> {
                   Visibility(
                     visible: widget.lastNumber.trim() != '',
                     child: SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.08,
+                      height: promptFoundHeight,
                       child: Align(
                         alignment: Alignment.centerLeft,
-                        child: Text(
-                            FlutterI18n.translate(context, 'PROMPT_FOUND_WORDS',
-                                translationParams: {
-                                  'fcwrds':
-                                      '${(widget.countWords).toString()}/${widget.countTotal}',
-                                  'fnmbr': widget.lastNumber
-                                }),
-                            style: TextStyle(
-                                fontSize: big1FontSize,
-                                fontWeight: FontWeight.bold)),
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
+                          child: Text(
+                              FlutterI18n.translate(
+                                  context, 'PROMPT_FOUND_WORDS',
+                                  translationParams: {
+                                    'fcwrds':
+                                        '${(widget.countWords).toString()}/${widget.countTotal}',
+                                    'fnmbr': widget.lastNumber
+                                  }),
+                              style: TextStyle(
+                                  fontSize: big1FontSize,
+                                  fontWeight: FontWeight.bold)),
+                        ),
                       ),
                     ),
                   ),
