@@ -1,5 +1,8 @@
 // results.dart
 
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
@@ -74,9 +77,13 @@ class WordsPageNewState extends State<WordsPageNew> {
         Menu(context: context, page: 'main', updateParent: updateSelf)
       ],
     );
-    final double appBarHeight = appBar.preferredSize.height;
-    double promptTitleHeight = appBarHeight;
-    double promptFoundHeight = 70;
+    double appBarHeight = appBar.preferredSize.height;
+    double appBarBottomHeight = MediaQuery.of(context).padding.bottom;
+    if (kIsWeb == false) {
+      appBarBottomHeight = 60;
+    }
+    double appBarsHeight = appBarHeight + appBarBottomHeight;
+    double promptFoundHeight = 50;
     double promptLanguageHeight = 45;
     List<String> wordKeys = List<String>.from(widget.words.keys);
     Map<int, TableColumnWidth> myColumnWidths = {};
@@ -105,17 +112,15 @@ class WordsPageNewState extends State<WordsPageNew> {
 
       widgetMajorList.add(TableCell(
           child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-              height: (screenHeight -
-                  promptTitleHeight -
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+            Container(
+              height: screenHeight -
+                  appBarsHeight -
                   promptFoundHeight -
-                  promptLanguageHeight),
-              padding: EdgeInsets.all(2.0),
-              decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black), color: Colors.white),
+                  promptLanguageHeight,
               child: ListView.builder(
                   itemCount: widget.words[wordKeys[i]]!.length,
                   itemBuilder: (context, j) {
@@ -240,9 +245,9 @@ class WordsPageNewState extends State<WordsPageNew> {
                         ),
                       ),
                     );
-                  }))
-        ],
-      )));
+                  }),
+            )
+          ])));
     }
     if (widgetLanguageHeaderList.length == wordKeys.length) {
       widgetTableRowList.add(TableRow(children: widgetLanguageHeaderList));
@@ -286,16 +291,19 @@ class WordsPageNewState extends State<WordsPageNew> {
                       ),
                     ),
                   ),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Table(
-                              columnWidths: myColumnWidths,
-                              children: widgetTableRowList),
-                        ]),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Table(
+                                columnWidths: myColumnWidths,
+                                children: widgetTableRowList),
+                          ]),
+                    ),
                   )
                 ])));
   }
