@@ -1,0 +1,1 @@
+Peamine süsteemi sõnageneraator. See teisendab arvu definitsioonidega sõnadeks.

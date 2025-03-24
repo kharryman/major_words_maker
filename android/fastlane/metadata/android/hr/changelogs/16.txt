@@ -1,0 +1,3 @@
+Može prikazati riječi i definicije na engleskom, francuskom, njemačkom, talijanskom i španjolskom jeziku.
+Riječi su podijeljene svojim jezikom kao stupci u tablici.
+Stvorena mogućnost uklanjanja oglasa uz malu naknadu.

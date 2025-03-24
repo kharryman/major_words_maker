@@ -13,6 +13,7 @@ import 'package:flutter/foundation.dart';
 
 //import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_i18n/loaders/decoders/base_decode_strategy.dart';
 import 'package:flutter_i18n/loaders/decoders/json_decode_strategy.dart';
 import 'package:http/http.dart';
@@ -34,6 +35,7 @@ import 'package:multiselect/multiselect.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:advanced_in_app_review/advanced_in_app_review.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
 
 //import 'package:flutter_native_splash/flutter_native_splash.dart';
 //import 'package:device_info/device_info.dart';
@@ -58,6 +60,8 @@ dynamic defaultLanguage = {
   "name2": "LANGUAGE_ENGLISH",
   "value": "en"
 };
+String priceNoAds = "\$1";
+bool isAds = true;
 
 class MajorWord {
   String name;
@@ -81,6 +85,11 @@ Future<void> main() async {
       ..updateRequestConfiguration(RequestConfiguration(
         testDeviceIds: testDevices,
       ));
+    InAppPurchase.instance.isAvailable().then((available) {
+      if (!available) {
+        print("In-app purchases not available on this device.");
+      }
+    });
   } else {
     print("main NOT SHOWING AD");
   }
@@ -103,7 +112,7 @@ class MyApp extends StatelessWidget {
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   @override
   Widget build(BuildContext context) {
-    MyHomePageState().setSavedLanguage(context);
+    MyHomeState().setSavedLanguage(context);
     return MaterialApp(
       navigatorKey: navigatorKey,
       localizationsDelegates: [
@@ -128,7 +137,7 @@ class MyApp extends StatelessWidget {
         colorScheme:
             ColorScheme.fromSeed(seedColor: Color.fromRGBO(200, 255, 200, 1.0)),
       ),
-      home: MyHomePage(),
+      home: MyHome(),
     );
   }
 }
@@ -143,7 +152,12 @@ class AppData extends ChangeNotifier {
   Future<void> setLanguage(dynamic myLanguage) async {
     selectedLanguage = myLanguage;
     selectedMajorLanguage = selectedLanguage;
-    await MyHomePageState().setData("LANGUAGE", selectedLanguage["value"]);
+    await MyHomeState().setData("LANGUAGE", selectedLanguage["value"]);
+  }
+
+  void setIsAds(bool myIsAds) {
+    print("AppData setIsAds called myIsAds = $myIsAds");
+    isAds = myIsAds;
   }
 
   bool menuOpen = false;
@@ -152,12 +166,12 @@ class AppData extends ChangeNotifier {
   }
 }
 
-class MyHomePage extends StatefulWidget {
+class MyHome extends StatefulWidget {
   @override
-  State<MyHomePage> createState() => MyHomePageState();
+  State<MyHome> createState() => MyHomeState();
 }
 
-class MyHomePageState extends State<MyHomePage> {
+class MyHomeState extends State<MyHome> with WidgetsBindingObserver {
   late BannerAd bannerAd;
   bool isBannerAdReady = false;
   String bannerIdAndroid = "ca-app-pub-8514966468184377/3564317476";
@@ -312,6 +326,7 @@ class MyHomePageState extends State<MyHomePage> {
   bool isAllLanguages = false;
 
   int lastSelectedLanguagesLength = 0;
+  StreamSubscription<List<PurchaseDetails>>? purchaseSubscription;
 
   @override
   void initState() {
@@ -327,10 +342,6 @@ class MyHomePageState extends State<MyHomePage> {
     isLanguagesLoading = true;
     //DEFAULT TO ENGLISH:
     selectedMajorLanguage = languages[6];
-    if (kIsWeb == false) {
-      createInterstitialAd();
-      loadBannerAd();
-    }
     setSavedLanguage(null);
     Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
       bool isOnline = result != ConnectivityResult.none;
@@ -342,9 +353,13 @@ class MyHomePageState extends State<MyHomePage> {
           "Main initState Connectivity RESOLVED result = $result, isOnline = $isOnline");
       doNetworkChange(isOnline);
     });
+    if (kIsWeb == false && isAds == true) {
+      createInterstitialAd();
+      loadBannerAd();
+    }
   }
 
-  doNetworkChange(bool isOnline) {
+  doNetworkChange(bool isOnline) async {
     if (isOnline == false) {
       setState(() {
         print("OFFLINE...");
@@ -355,6 +370,9 @@ class MyHomePageState extends State<MyHomePage> {
       });
     } else {
       setAvailLanguages();
+      if (kIsWeb == false) {
+        await initializeInAppPurchase();
+      }
     }
   }
 
@@ -377,6 +395,99 @@ class MyHomePageState extends State<MyHomePage> {
     });
   }
   */
+
+  @override
+  didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      if (kIsWeb == false) {
+        createInterstitialAd();
+        initializeInAppPurchase();
+      }
+    }
+  }
+
+  Future<void> initializeInAppPurchase() async {
+    final InAppPurchase iap = InAppPurchase.instance;
+    final bool isAvailable = await iap.isAvailable();
+
+    if (isAvailable) {
+      if (purchaseSubscription != null) {
+        await purchaseSubscription!.cancel();
+      }
+
+      purchaseSubscription =
+          iap.purchaseStream.listen((List<PurchaseDetails> purchases) async {
+        PurchaseDetails? purchaseRemoveAds = purchases.isNotEmpty
+            ? purchases
+                .firstWhere((purchase) => purchase.productID == 'remove_ads')
+            : null;
+
+        if (purchaseRemoveAds != null) {
+          if (purchaseRemoveAds.status == PurchaseStatus.purchased ||
+              purchaseRemoveAds.status == PurchaseStatus.restored) {
+            print(
+                "main initializeInAppPurchase remove_ads ${purchaseRemoveAds.status == PurchaseStatus.purchased ? "PURCHASED" : "RESTORED"}! Setting isAds=FALSE!");
+
+            print("main initializeInAppPurchase COMPLETING PURCHASE!");
+            setState(() {
+              disposeAds();
+              isAds = false;
+            });
+
+            if (purchaseRemoveAds.pendingCompletePurchase) {
+              print("Completing purchase...");
+              await InAppPurchase.instance.completePurchase(purchaseRemoveAds);
+              await MenuState().showSuccessThanksBuy();
+            }
+          } else if (purchaseRemoveAds.status == PurchaseStatus.error) {
+            // Handle failed purchase
+            print(
+                "main initializeInAppPurchase 'remove_ads' Purchase error: ${purchaseRemoveAds.error}.");
+            //if (mounted) {
+            //  WidgetsBinding.instance.addPostFrameCallback((_) {
+            await MyHomeState().showPopup(context,
+                "${FlutterI18n.translate(context, "PROMPT_PURCHASING_ERROR")}: ${purchaseRemoveAds.error}");
+            // });
+            //}
+          }
+        }
+      }, onError: (error) {
+        print("Purchase Error: $error");
+      }, onDone: () {
+        purchaseSubscription?.cancel(); // Clean up after use
+      }, cancelOnError: true);
+      await restorePurchases();
+    }
+  }
+
+  Future<void> restorePurchases() async {
+    print("restorePurchases called");
+    if (kIsWeb == true) {
+      //MyHomeState().showPopup(context, "CAN'T RESTORE ADS ON WEB!");
+      print("Cant restore purchases on web-app.");
+    } else {
+      //setState(() {
+      //  isRestoring = true;
+      //});
+      final InAppPurchase iapInstance = InAppPurchase.instance;
+      bool isAvailable = await iapInstance.isAvailable();
+      if (isAvailable) {
+        // Fetch past purchases
+        try {
+          await iapInstance.restorePurchases();
+        } catch (e) {
+          print("Failed to restore purchases");
+          //ScaffoldMessenger.of(context).showSnackBar(
+          //  SnackBar(content: Text("Failed to restore purchases")),
+          //);
+          //setState(() {
+          //  isRestoring = false;
+          //});
+          return;
+        }
+      }
+    }
+  }
 
   getTransLangValue(dynamic value) {
     return "${value["name1"]}(${FlutterI18n.translate(context, value["name2"])})";
@@ -439,7 +550,7 @@ class MyHomePageState extends State<MyHomePage> {
         if (isSuccess == true) {
           dynamic availLang;
           for (int i = 0; i < gotLanguages.length; i++) {
-            availLang = (MyHomePageState().languages.where((dynamic language) =>
+            availLang = (MyHomeState().languages.where((dynamic language) =>
                 language["value"] == gotLanguages[i]["Code"])).toList()[0];
             availLanguages.add(availLang);
           }
@@ -474,6 +585,38 @@ class MyHomePageState extends State<MyHomePage> {
               },
               child: Text('Close'),
             ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> showConfirm(BuildContext context, String title, String message,
+      String cancelText, String okText, Function callback) async {
+    print("showshowConfirm called");
+    return showDialog<void>(
+      context: context,
+      barrierDismissible:
+          false, // Prevent dismissing by tapping outside the popup
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: SizedBox(
+              width: MediaQuery.of(context).size.width * 0.70,
+              child: SingleChildScrollView(child: Html(data: message))),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the popup
+              },
+              child: Text(cancelText),
+            ),
+            TextButton(
+              onPressed: () {
+                callback();
+              },
+              child: Text(okText),
+            )
           ],
         );
       },
@@ -576,7 +719,7 @@ class MyHomePageState extends State<MyHomePage> {
       return;
     }
 
-    if (targetLanguage == "en" &&
+    if (isAds == false && targetLanguage == "en" &&
         myFilteredLanguages.length == 1 &&
         myFilteredLanguages[0] == "English(English)") {
       makeMajorWordsOld(context);
@@ -941,6 +1084,9 @@ class MyHomePageState extends State<MyHomePage> {
     if (kIsWeb == true) {
       print('Web can not show ads.');
       callback();
+    } else if (isAds == false) {
+      print('isAds FALSE. SHOW NO-ADS WAS PURCHASED!.');
+      callback();
     } else if (interstitialAd == null) {
       print('Warning: attempt to show interstitialAd before loaded.');
       callback();
@@ -990,6 +1136,11 @@ class MyHomePageState extends State<MyHomePage> {
       ),
     );
     bannerAd.load();
+  }
+
+  void disposeAds() {
+    interstitialAd?.dispose();
+    bannerAd.dispose();
   }
 
   @override
@@ -1063,7 +1214,7 @@ class MyHomePageState extends State<MyHomePage> {
     );
     print("Menu build myList = $myList");
     print("Menu build myFilteredLanguages = $myFilteredLanguages");
-    MyHomePageState().setSavedLanguage(context);
+    MyHomeState().setSavedLanguage(context);
     //const appTitle = 'Major Words Maker';
     double screenWidth = MediaQuery.of(context).size.width;
     double tabFontSize =
@@ -1289,7 +1440,7 @@ class MyHomePageState extends State<MyHomePage> {
             ],
           ),
         ),
-        bottomNavigationBar: isBannerAdReady
+        bottomNavigationBar: (isAds == true && isBannerAdReady)
             ? Container(
                 color: Colors.white,
                 width: bannerAd.size.width.toDouble(),

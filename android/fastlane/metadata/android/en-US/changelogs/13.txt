@@ -1,0 +1,1 @@
+Much better major words table appearance. The words are divided by their language as columns on the table. There is  progress loading message. The start-up splash screen is much better. Fix to table height size.

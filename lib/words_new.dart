@@ -43,16 +43,14 @@ class WordsPageNewState extends State<WordsPageNew> {
   }
 
   String getLanguage(BuildContext context, String LID) {
-    dynamic myLanguage = MyHomePageState()
-        .languages
-        .where((lang) => lang["LID"] == LID)
-        .toList()[0];
+    dynamic myLanguage =
+        MyHomeState().languages.where((lang) => lang["LID"] == LID).toList()[0];
     return "${myLanguage["name1"]}(${FlutterI18n.translate(context, myLanguage["name2"])})";
   }
 
   @override
   Widget build(BuildContext context) {
-    MyHomePageState().setSavedLanguage(context);
+    MyHomeState().setSavedLanguage(context);
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     double titleFontSize =

@@ -1,0 +1,1 @@
+Ein Major System-Wortgenerator. Er wandelt Zahlen in Wörter mit Definitionen um.

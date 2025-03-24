@@ -1,0 +1,2 @@
+See on põhisüsteemi sõnageneraator. Põhisüsteem on numbrite ja sõnade mälusüsteem, mis aitab teil meeles pidada numbreid, kuupäevi jne. Süsteemi iga 10 numbrit esindab sarnase kõlaga konsonantide komplekt. Suure süsteemi kujundas 17. sajandi Stanislaus Mink von Wennsshein.
+Rakendus kasutab enam kui 50 000 sõnast koosnevat sisesõnastikku, et kiiresti luua olulisi definitsioonidega süsteemisõnu. Sõnu, vormindatud sõnu (MaJoR) ja määratlusi saab neid lihtsalt klõpsates kopeerida. Seal on ka mugav hüpikaken, mis annab ülevaate põhisüsteemi toimimisest.

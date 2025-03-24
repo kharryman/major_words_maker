@@ -1,0 +1,1 @@
+Główny generator słów systemowych. Konwertuje liczbę na słowa z definicjami.

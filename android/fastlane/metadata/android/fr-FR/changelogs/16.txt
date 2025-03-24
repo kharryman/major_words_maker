@@ -1,0 +1,3 @@
+Possibilité d'afficher des mots et des définitions en anglais, français, allemand, italien et espagnol.
+Les mots sont classés par langue sous forme de colonnes dans le tableau.
+Possibilité de supprimer les publicités moyennant une somme modique.

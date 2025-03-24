@@ -1,0 +1,1 @@
+Generátor slov hlavního systému. Převádí číslo na slova s definicemi.

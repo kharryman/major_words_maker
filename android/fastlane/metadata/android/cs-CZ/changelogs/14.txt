@@ -1,0 +1,3 @@
+Dokáže zobrazit slova a definice v angličtině, francouzštině, němčině, italštině a španělštině.
+Slova jsou rozdělena podle jazyka jako sloupce v tabulce.
+Vytvořená možnost odstraňovat reklamy za malý poplatek.

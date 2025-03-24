@@ -1,0 +1,3 @@
+Võimaldab näidata sõnu ja definitsioone inglise, prantsuse, saksa, itaalia ja hispaania keeles.
+Sõnad on jaotatud nende keele järgi tabelis veergudena.
+Loodud võimalus väikese tasu eest reklaame eemaldada.

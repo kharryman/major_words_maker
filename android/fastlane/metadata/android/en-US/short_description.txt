@@ -1,0 +1,1 @@
+A Major System word generator. It converts a number to words with definitions.

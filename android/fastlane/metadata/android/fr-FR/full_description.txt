@@ -1,0 +1,3 @@
+Il s'agit d'un générateur de mots du système majeur. Ce système de mémorisation de nombres en mots vous aide à mémoriser des nombres, des dates, etc. Chacun des 10 chiffres du système est représenté par un ensemble de consonnes similaires. Le système majeur a été conçu par Stanislaus Mink von Wennsshein au XVIIe siècle.
+
+L'application utilise un dictionnaire interne de plus de 50 000 mots pour créer rapidement des mots du système majeur avec leurs définitions. Les mots, les mots formatés (MaJoR) et les définitions peuvent être copiés d'un simple clic. Une fenêtre contextuelle pratique explique le fonctionnement du système majeur.

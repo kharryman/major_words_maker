@@ -1,0 +1,3 @@
+Możliwość wyświetlania słów i definicji w języku angielskim, francuskim, niemieckim, włoskim i hiszpańskim. 
+Słowa są podzielone według języka jako kolumny w tabeli. 
+Utworzono możliwość usuwania reklam za niewielką opłatą.

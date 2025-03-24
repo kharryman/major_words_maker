@@ -1,0 +1,3 @@
+Pystyy näyttämään sanoja ja määritelmiä englanniksi, ranskaksi, saksaksi, italiaksi ja espanjaksi.
+Sanat on jaettu kielen mukaan sarakkeiksi taulukossa.
+Luotu mahdollisuus poistaa mainoksia pientä maksua vastaan.
