@@ -1,0 +1,3 @@
+Capaz de mostrar palavras e definições em inglês, francês, alemão, italiano e espanhol. 
+As palavras são divididas por seu idioma como colunas na tabela. 
+Criada capacidade de remover anúncios por uma pequena taxa.

@@ -1,0 +1,1 @@
+Glavni generator riječi sustava. Pretvara broj u riječi s definicijama.

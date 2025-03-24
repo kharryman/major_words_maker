@@ -1,0 +1,3 @@
+Lahko prikaže besede in definicije v angleščini, francoščini, nemščini, italijanščini in španščini.
+Besede so razdeljene po jeziku kot stolpci v tabeli.
+Ustvarjena možnost odstranjevanja oglasov za majhno plačilo.

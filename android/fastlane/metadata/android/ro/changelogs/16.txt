@@ -1,0 +1,3 @@
+Capabil să arate cuvinte și definiții în engleză, franceză, germană, italiană și spaniolă.
+Cuvintele sunt împărțite după limba lor ca coloane pe tabel.
+Capacitatea creată de a elimina reclamele pentru o taxă mică.

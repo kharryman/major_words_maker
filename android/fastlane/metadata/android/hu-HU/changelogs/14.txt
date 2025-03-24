@@ -1,0 +1,3 @@
+Képes szavakat és definíciókat megjeleníteni angol, francia, német, olasz és spanyol nyelven.
+A szavak nyelvük szerint vannak osztva oszlopokként a táblázaton.
+Lehetőséget teremtett a hirdetések kis díj ellenében történő eltávolítására.

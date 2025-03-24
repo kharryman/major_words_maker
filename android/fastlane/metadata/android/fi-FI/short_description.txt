@@ -1,0 +1,1 @@
+Pääjärjestelmän sanageneraattori. Se muuntaa luvun sanoiksi määritelmillä.

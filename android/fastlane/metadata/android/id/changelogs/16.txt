@@ -1,0 +1,3 @@
+Dapat menampilkan kata-kata dan definisi dalam bahasa Inggris, Prancis, Jerman, Italia, dan Spanyol. 
+Kata-kata dibagi berdasarkan bahasanya sebagai kolom pada tabel. 
+Menciptakan kemampuan untuk menghapus iklan dengan biaya yang murah.
