@@ -12,6 +12,9 @@ PODS:
     - Google-Mobile-Ads-SDK (~> 11.2.0)
     - webview_flutter_wkwebview
   - GoogleUserMessagingPlatform (2.5.0)
+  - in_app_purchase_storekit (0.0.1):
+    - Flutter
+    - FlutterMacOS
   - in_app_review (0.2.0):
     - Flutter
   - Reachability (3.2)
@@ -28,6 +31,7 @@ DEPENDENCIES:
   - connectivity (from `.symlinks/plugins/connectivity/ios`)
   - Flutter (from `Flutter`)
   - google_mobile_ads (from `.symlinks/plugins/google_mobile_ads/ios`)
+  - in_app_purchase_storekit (from `.symlinks/plugins/in_app_purchase_storekit/darwin`)
   - in_app_review (from `.symlinks/plugins/in_app_review/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
@@ -48,6 +52,8 @@ EXTERNAL SOURCES:
     :path: Flutter
   google_mobile_ads:
     :path: ".symlinks/plugins/google_mobile_ads/ios"
+  in_app_purchase_storekit:
+    :path: ".symlinks/plugins/in_app_purchase_storekit/darwin"
   in_app_review:
     :path: ".symlinks/plugins/in_app_review/ios"
   shared_preferences_foundation:
@@ -64,6 +70,7 @@ SPEC CHECKSUMS:
   Google-Mobile-Ads-SDK: 5a6d005a6cb5b5e8f4c7b69ca05cdea79c181139
   google_mobile_ads: 9379c80fdfa9988fb0e105a407890ff8deb3cf86
   GoogleUserMessagingPlatform: 6b4f48a370e77ce121d034c908cc6ee4fdafaf13
+  in_app_purchase_storekit: a1ce04056e23eecc666b086040239da7619cd783
   in_app_review: 318597b3a06c22bb46dc454d56828c85f444f99d
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
   shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78

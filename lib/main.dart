@@ -62,6 +62,7 @@ dynamic defaultLanguage = {
 };
 String priceNoAds = "\$1";
 bool isAds = true;
+String removeAdsProductId = "remove_ads";
 
 class MajorWord {
   String name;
@@ -77,8 +78,10 @@ Future<void> main() async {
     var testDevices = <String>[];
     if (Platform.isAndroid) {
       testDevices = [testDevice];
+      removeAdsProductId = "remove_ads";
     } else if (Platform.isIOS) {
       testDevices = [myIpad, myIphone11];
+      removeAdsProductId = "remove_ads_major_words_maker";
     }
     MobileAds.instance
       ..initialize()
@@ -418,15 +421,15 @@ class MyHomeState extends State<MyHome> with WidgetsBindingObserver {
       purchaseSubscription =
           iap.purchaseStream.listen((List<PurchaseDetails> purchases) async {
         PurchaseDetails? purchaseRemoveAds = purchases.isNotEmpty
-            ? purchases
-                .firstWhere((purchase) => purchase.productID == 'remove_ads')
+            ? purchases.firstWhere(
+                (purchase) => purchase.productID == removeAdsProductId)
             : null;
 
         if (purchaseRemoveAds != null) {
           if (purchaseRemoveAds.status == PurchaseStatus.purchased ||
               purchaseRemoveAds.status == PurchaseStatus.restored) {
             print(
-                "main initializeInAppPurchase remove_ads ${purchaseRemoveAds.status == PurchaseStatus.purchased ? "PURCHASED" : "RESTORED"}! Setting isAds=FALSE!");
+                "main initializeInAppPurchase $removeAdsProductId ${purchaseRemoveAds.status == PurchaseStatus.purchased ? "PURCHASED" : "RESTORED"}! Setting isAds=FALSE!");
 
             print("main initializeInAppPurchase COMPLETING PURCHASE!");
             setState(() {
@@ -442,7 +445,7 @@ class MyHomeState extends State<MyHome> with WidgetsBindingObserver {
           } else if (purchaseRemoveAds.status == PurchaseStatus.error) {
             // Handle failed purchase
             print(
-                "main initializeInAppPurchase 'remove_ads' Purchase error: ${purchaseRemoveAds.error}.");
+                "main initializeInAppPurchase '$removeAdsProductId' Purchase error: ${purchaseRemoveAds.error}.");
             //if (mounted) {
             //  WidgetsBinding.instance.addPostFrameCallback((_) {
             await MyHomeState().showPopup(context,
@@ -719,7 +722,8 @@ class MyHomeState extends State<MyHome> with WidgetsBindingObserver {
       return;
     }
 
-    if (isAds == false && targetLanguage == "en" &&
+    if (isAds == false &&
+        targetLanguage == "en" &&
         myFilteredLanguages.length == 1 &&
         myFilteredLanguages[0] == "English(English)") {
       makeMajorWordsOld(context);
