@@ -335,6 +335,7 @@ class MyHomeState extends State<MyHome> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     if (kIsWeb == false) {
+      initializeInAppPurchase();
       AdvancedInAppReview()
           .setMinDaysBeforeRemind(7)
           .setMinDaysAfterInstall(2)
@@ -404,7 +405,7 @@ class MyHomeState extends State<MyHome> with WidgetsBindingObserver {
     if (state == AppLifecycleState.resumed) {
       if (kIsWeb == false) {
         createInterstitialAd();
-        initializeInAppPurchase();
+        //initializeInAppPurchase();
       }
     }
   }
@@ -438,10 +439,15 @@ class MyHomeState extends State<MyHome> with WidgetsBindingObserver {
             });
 
             if (purchaseRemoveAds.pendingCompletePurchase) {
+              await MenuState().showSuccessThanksBuy();
               print("Completing purchase...");
               await InAppPurchase.instance.completePurchase(purchaseRemoveAds);
-              await MenuState().showSuccessThanksBuy();
             }
+          } else if (purchaseRemoveAds.status == PurchaseStatus.pending) {
+            print(
+                "IAP.listen purchaseRemoveAds.status == PurchaseStatus.pending ...");
+            //await InAppPurchase.instance.completePurchase(purchaseRemoveAds);
+            await MenuState().showSuccessThanksBuy();
           } else if (purchaseRemoveAds.status == PurchaseStatus.error) {
             // Handle failed purchase
             print(
