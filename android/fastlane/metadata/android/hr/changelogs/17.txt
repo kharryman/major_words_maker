@@ -1,0 +1,1 @@
+Bolje rukovanje izvan mreže. Ažurirane biblioteke. Manje ispravke ikona i naslova za korištenje kao web-aplikacije. Mogućnost prikaza riječi i definicija na engleskom, francuskom, njemačkom, talijanskom i španjolskom jeziku. Riječi su podijeljene prema jeziku kao stupci u tablici. Dodana je mogućnost uklanjanja oglasa uz malu naknadu.

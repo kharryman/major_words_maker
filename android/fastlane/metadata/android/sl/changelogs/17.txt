@@ -1,0 +1,1 @@
+Boljše delo brez povezave. Posodobljene knjižnice. Manjši popravki ikon in naslovov za uporabo kot spletne aplikacije. Možnost prikaza besed in definicij v angleščini, francoščini, nemščini, italijanščini in španščini. Besede so v tabeli razdeljene po jeziku kot stolpci. Ustvarjena je možnost odstranitve oglasov za majhno plačilo.

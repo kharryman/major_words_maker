@@ -50,6 +50,7 @@
     "LANGUAGE_VIETNAMESE": "Vietnamese",
     "LANGUAGE_WELSH": "Welsh",
     "MAKE_MAJOR_WORDS": "Samee Erayo Waaweyn",
+    "NOT_ONLINE": "Ma Online. ** Haddii aad rabto inaad isticmaasho offline, fadlan dhagsii 'ka saar xayeysiisyada!' ka menu.",
     "POPUP_NO_ADS_MESSAGE2": "Ku raaxayso khibrad xayaysiis la'aan ah **{mDev}** kaliya **{mPr}**!",
     "POPUP_NO_ADS_TITLE": "Ma rabtaa wax kala jiidasho leh?",
     "PROGRESS_MAKE_MAJOR": "Samaynta ereyo waaweyn...",

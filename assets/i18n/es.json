@@ -50,6 +50,7 @@
     "LANGUAGE_VIETNAMESE": "vietnamita",
     "LANGUAGE_WELSH": "Galés",
     "MAKE_MAJOR_WORDS": "hacer palabras importantes",
+    "NOT_ONLINE": "No en línea. ** Si desea usarlo sin conexión, haga clic en \"¡Eliminar anuncios!\" en el menú.",
     "POPUP_NO_ADS_MESSAGE2": "¡Disfruta de una experiencia sin publicidad en **{mDev}** por solo **{mPr}**!",
     "POPUP_NO_ADS_TITLE": "¿No quieres distracciones?",
     "PROGRESS_MAKE_MAJOR": "Haciendo palabras importantes...",

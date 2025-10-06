@@ -50,6 +50,7 @@
     "LANGUAGE_VIETNAMESE": "Vietnamese",
     "LANGUAGE_WELSH": "Welsh",
     "MAKE_MAJOR_WORDS": "Make Major Words",
+    "NOT_ONLINE": "Not Online. ** If you want to use offline, please click 'Remove Ads!' from the menu.",
     "POPUP_NO_ADS_MESSAGE2": "Enjoy an ad-free experience on **{mDev}** for just **{mPr}**!",
     "POPUP_NO_ADS_TITLE": "Want No Distractions?",
     "PROGRESS_MAKE_MAJOR": "Making major words...",

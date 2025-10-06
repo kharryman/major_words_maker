@@ -1,0 +1,5 @@
+Migliore gestione offline.
+Librerie aggiornate. Piccole correzioni a icone e titoli per l'utilizzo come web app.
+Può mostrare parole e definizioni in inglese, francese, tedesco, italiano e spagnolo.
+Le parole sono divise in colonne in base alla lingua nella tabella.
+Creata la possibilità di rimuovere gli annunci pubblicitari a un piccolo costo.

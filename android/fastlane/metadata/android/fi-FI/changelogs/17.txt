@@ -1,0 +1,8 @@
+Parempi offline-käyttö.
+
+Päivitetyt kirjastot. Pieniä kuvake- ja otsikkokorjauksia verkkosovelluksen käyttöä varten.
+
+Pystyy näyttämään sanoja ja määritelmiä englanniksi, ranskaksi, saksaksi, italiaksi ja espanjaksi.
+Sanat on jaettu kielen mukaan sarakkeiksi taulukossa.
+
+Luotu mahdollisuus poistaa mainoksia pientä maksua vastaan.

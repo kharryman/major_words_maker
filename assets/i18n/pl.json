@@ -50,6 +50,7 @@
     "LANGUAGE_VIETNAMESE": "wietnamski",
     "LANGUAGE_WELSH": "Walijski",
     "MAKE_MAJOR_WORDS": "Twórz najważniejsze słowa",
+    "NOT_ONLINE": "Brak dostępu do Internetu. ** Jeśli chcesz korzystać z wersji offline, kliknij „Usuń reklamy!” w menu.",
     "POPUP_NO_ADS_MESSAGE2": "Ciesz się korzystaniem z serwisu **{mDev}** bez reklam za jedyne **{mPr}**!",
     "POPUP_NO_ADS_TITLE": "Chcesz, żeby nic Cię nie rozpraszało?",
     "PROGRESS_MAKE_MAJOR": "Tworzenie najważniejszych słów...",

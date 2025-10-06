@@ -50,6 +50,7 @@
     "LANGUAGE_VIETNAMESE": "Vietnamera",
     "LANGUAGE_WELSH": "Galesera",
     "MAKE_MAJOR_WORDS": "Egin hitz nagusiak",
+    "NOT_ONLINE": "Ez dago sarean. ** Lineaz kanpo erabili nahi baduzu, egin klik menuko 'Kendu iragarkiak!' aukeran.",
     "POPUP_NO_ADS_MESSAGE2": "Gozatu iragarkirik gabeko esperientzia batez **{mDev}** **{mPr}** soilik!",
     "POPUP_NO_ADS_TITLE": "Ez al duzu distrakziorik nahi?",
     "PROGRESS_MAKE_MAJOR": "Hitz nagusiak egiten...",

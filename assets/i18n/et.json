@@ -50,6 +50,7 @@
     "LANGUAGE_VIETNAMESE": "vietnamlane",
     "LANGUAGE_WELSH": "Kõmri",
     "MAKE_MAJOR_WORDS": "Tehke olulisi sõnu",
+    "NOT_ONLINE": "Pole võrgus. ** Kui soovite võrguühenduseta kasutada, klõpsake menüüs nuppu „Eemalda reklaamid!”.",
     "POPUP_NO_ADS_MESSAGE2": "Nautige reklaamideta kogemust teenuses **{mDev}** vaid **{mPr}** eest!",
     "POPUP_NO_ADS_TITLE": "Kas soovite mitte segada?",
     "PROGRESS_MAKE_MAJOR": "Peamiste sõnade tegemine...",

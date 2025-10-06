@@ -1,0 +1,1 @@
+Beter vanlyn hantering. Opgedateerde biblioteke. Klein ikoon- en titelregstellings vir gebruik as webtoepassing. In staat om woorde en definisies in Engels, Frans, Duits, Italiaans en Spaans te wys. Die woorde word volgens hul taal as kolomme op die tabel verdeel. Die vermoë geskep om advertensies teen 'n klein fooi te verwyder.

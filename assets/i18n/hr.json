@@ -50,6 +50,7 @@
     "LANGUAGE_VIETNAMESE": "vijetnamski",
     "LANGUAGE_WELSH": "Velški",
     "MAKE_MAJOR_WORDS": "Napravi glavne riječi",
+    "NOT_ONLINE": "Nije online. ** Ako želite koristiti offline, kliknite 'Ukloni oglase!' u izborniku.",
     "POPUP_NO_ADS_MESSAGE2": "Uživajte u iskustvu bez oglasa na **{mDev}** za samo **{mPr}**!",
     "POPUP_NO_ADS_TITLE": "Ne želite ništa ometati?",
     "PROGRESS_MAKE_MAJOR": "Izrada glavnih riječi...",

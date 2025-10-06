@@ -33,7 +33,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:http/http.dart' as http;
 import 'package:multiselect/multiselect.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
-import 'package:connectivity/connectivity.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:advanced_in_app_review/advanced_in_app_review.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 
@@ -51,6 +51,7 @@ int numInterstitialLoadAttempts = 0;
 
 ///------
 dynamic selectedMajorLanguage;
+List<dynamic> savedAvailLanguages = [];
 List<dynamic> availLanguages = [];
 List<String> myList = ["English(English)"];
 List<String> myFilteredLanguages = [];
@@ -63,6 +64,7 @@ dynamic defaultLanguage = {
 String priceNoAds = "\$1";
 bool isAds = true;
 String removeAdsProductId = "remove_ads";
+bool isOnline = true;
 
 class MajorWord {
   String name;
@@ -135,11 +137,8 @@ class MyApp extends StatelessWidget {
       ],
       title: 'Major Words Maker App',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        useMaterial3: true,
-        colorScheme:
-            ColorScheme.fromSeed(seedColor: Color.fromRGBO(200, 255, 200, 1.0)),
-      ),
+      theme:
+          ThemeData(useMaterial3: true, scaffoldBackgroundColor: Colors.white),
       home: MyHome(),
     );
   }
@@ -330,6 +329,8 @@ class MyHomeState extends State<MyHome> with WidgetsBindingObserver {
 
   int lastSelectedLanguagesLength = 0;
   StreamSubscription<List<PurchaseDetails>>? purchaseSubscription;
+  late final StreamSubscription<List<ConnectivityResult>>
+      connectivitySubscription;
 
   @override
   void initState() {
@@ -347,15 +348,24 @@ class MyHomeState extends State<MyHome> with WidgetsBindingObserver {
     //DEFAULT TO ENGLISH:
     selectedMajorLanguage = languages[6];
     setSavedLanguage(null);
-    Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      bool isOnline = result != ConnectivityResult.none;
-      doNetworkChange(isOnline);
+    
+
+    final Connectivity connectivity = Connectivity();
+    connectivitySubscription = connectivity.onConnectivityChanged
+        .listen((List<ConnectivityResult> results) {
+      final ConnectivityResult result =
+          results.isNotEmpty ? results.first : ConnectivityResult.none;
+      isOnline = result != ConnectivityResult.none;
+      doNetworkChange();
     });
-    Connectivity().checkConnectivity().then((ConnectivityResult result) {
-      bool isOnline = result != ConnectivityResult.none;
+
+    connectivity.checkConnectivity().then((List<ConnectivityResult> results) {
+      final ConnectivityResult result =
+          results.isNotEmpty ? results.first : ConnectivityResult.none;
+      isOnline = result != ConnectivityResult.none;
       print(
-          "Main initState Connectivity RESOLVED result = $result, isOnline = $isOnline");
-      doNetworkChange(isOnline);
+          "Main initState Connectivity resolved: result = $result, isOnline = $isOnline");
+      doNetworkChange();
     });
     if (kIsWeb == false && isAds == true) {
       createInterstitialAd();
@@ -363,7 +373,7 @@ class MyHomeState extends State<MyHome> with WidgetsBindingObserver {
     }
   }
 
-  doNetworkChange(bool isOnline) async {
+  doNetworkChange() async {
     if (isOnline == false) {
       setState(() {
         print("OFFLINE...");
@@ -371,8 +381,11 @@ class MyHomeState extends State<MyHome> with WidgetsBindingObserver {
         isLanguagesLoading = false;
         myList = ["English(English)"];
         myFilteredLanguages = ["English(English)"];
+        availLanguages = [languages[6]]; //ENGLISH ONLY
       });
     } else {
+      print("ONLINE...");
+      availLanguages = savedAvailLanguages;
       setAvailLanguages();
       if (kIsWeb == false) {
         await initializeInAppPurchase();
@@ -556,12 +569,15 @@ class MyHomeState extends State<MyHome> with WidgetsBindingObserver {
       }
       setState(() {
         isLanguagesLoading = false;
+        availLanguages = [];
+        savedAvailLanguages = [];
         if (isSuccess == true) {
           dynamic availLang;
           for (int i = 0; i < gotLanguages.length; i++) {
             availLang = (MyHomeState().languages.where((dynamic language) =>
                 language["value"] == gotLanguages[i]["Code"])).toList()[0];
             availLanguages.add(availLang);
+            savedAvailLanguages.add(availLang);
           }
           resetMyList();
         }
@@ -727,11 +743,14 @@ class MyHomeState extends State<MyHome> with WidgetsBindingObserver {
       showPopup(context, FlutterI18n.translate(context, "PROMPT_NO_LANGUAGES"));
       return;
     }
+    print(
+        "doMakeMajorWords myFilteredLanguages.length = ${myFilteredLanguages.length}, myFilteredLanguages[0] = ${myFilteredLanguages[0]}");
 
     if (isAds == false &&
-        targetLanguage == "en" &&
-        myFilteredLanguages.length == 1 &&
-        myFilteredLanguages[0] == "English(English)") {
+        ((targetLanguage == "en" &&
+                myFilteredLanguages.length == 1 &&
+                myFilteredLanguages[0] == "English(English)") ||
+            isOnline == false)) {
       makeMajorWordsOld(context);
     } else {
       makeMajorWordsNew(context, targetLanguage);
@@ -816,103 +835,107 @@ class MyHomeState extends State<MyHome> with WidgetsBindingObserver {
 
   makeMajorWordsNew(BuildContext context, String targetLanguage) async {
     print("makeMajorWordsNew called targetLanguage = $targetLanguage");
-    if (numberController.text.trim() == '') {
-      return;
-    }
-    isLoading = true;
-    showProgress(
-        context, FlutterI18n.translate(context, "PROGRESS_MAKE_MAJOR"));
-    print(numberController.text);
-    lastNumber = numberController.text;
-    Map<String, List<dynamic>> gotMajorWords = {};
-    int countWords = 0;
-    print('makeMajorWords targetLanguage = $targetLanguage');
-    List<String> languageIds = [];
-    if (isAllLanguages == false) {
-      List<String> langVals = [];
-      for (var i = 0; i < myFilteredLanguages.length; i++) {
-        langVals
-            .add(myFilteredLanguages[i].toString().split("(")[0].toString());
-      }
-      print("makeMajorWords langVals =$langVals");
-      List<dynamic> languages = List<dynamic>.from(availLanguages
-          .where((dynamic lang) => langVals.contains(lang["name1"]))
-          .toList());
-      print("makeMajorWords got languages =${json.encode(languages)}");
-      languageIds = List<String>.from(
-          languages.map((dynamic lang) => lang["LID"]).toList());
-    }
-    //DEFAULT TO ENGLISH IF TARGET LANGUAGE(APP LANGUAGE) NOT AVAILABLE:
-    String targetLangId = "8";
-    List<dynamic> foundTargetLanguages = List<dynamic>.from(availLanguages
-        .where((dynamic lang) => lang["value"] == targetLanguage)
-        .toList());
-    if (foundTargetLanguages.isNotEmpty) {
-      targetLangId = foundTargetLanguages[0]["LID"];
-    }
-    Map<String, dynamic> body = {
-      "number": lastNumber,
-      "languageIds": languageIds,
-      "isAllLangs": isAllLanguages.toString(),
-      "targetLangId": targetLangId
-    };
-    print("ADD JOINT DATA = ${json.encode(body)}");
-    dynamic data = {"SUCCESS": false};
-    bool isRequestSuccess = true;
-    Response response = http.Response("", 200);
-    try {
-      response = await http.post(
-          Uri.parse(
-              'https://www.learnfactsquick.com/major_words_maker/make_major.php'),
-          body: json.encode(body));
-    } catch (e) {
-      isRequestSuccess = false;
-    }
-    if (isRequestSuccess == false) {
-      hideProgress(context);
-      showPopup(context, FlutterI18n.translate(context, "NETWORK_ERROR"));
+    if (isOnline == false) {
+      showPopup(context, FlutterI18n.translate(context, "NOT_ONLINE"));
     } else {
-      //hideProgress(context);
-      if (response.statusCode == 200) {
-        data = Map<String, dynamic>.from(json.decode(response.body));
-        print("GET MAJOR WORDS data = ${json.encode(data)}");
-        if (data["SUCCESS"] == true) {
-          countWords = data["COUNT_WORDS"];
-          int countTotal = data["COUNT_TOTAL"];
-          if (countWords > 0) {
-            gotMajorWords = Map<String, List<dynamic>>.from(data["WORDS"]);
-            List<String> LIDs = gotMajorWords.keys.toList();
-            for (int i = 0; i < LIDs.length; i++) {
-              for (int j = 0; j < gotMajorWords[LIDs[i]]!.length; j++) {
-                gotMajorWords[LIDs[i]]![j]["formattedWord"] =
-                    formatWord(gotMajorWords[LIDs[i]]![j]["Word"]);
-              }
-            }
-          } else {
-            gotMajorWords = {};
-          }
-          print("GOT MAJOR WORDS NEW = ${json.encode(gotMajorWords)}");
-          hideProgress(context);
-          showInterstitialAd(() {
-            print("NOT SHOWING AD");
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => WordsPageNew(
-                        lastNumber: lastNumber,
-                        words: gotMajorWords,
-                        countWords: countWords,
-                        countTotal: countTotal)));
-            setState(() {});
-          });
-        } else {
-          print("GET MAJOR WORDS ERROR: ${data["ERROR"]}");
-          hideProgress(context);
-          showPopup(context, data["ERROR"]);
+      if (numberController.text.trim() == '') {
+        return;
+      }
+      isLoading = true;
+      showProgress(
+          context, FlutterI18n.translate(context, "PROGRESS_MAKE_MAJOR"));
+      print(numberController.text);
+      lastNumber = numberController.text;
+      Map<String, List<dynamic>> gotMajorWords = {};
+      int countWords = 0;
+      print('makeMajorWords targetLanguage = $targetLanguage');
+      List<String> languageIds = [];
+      if (isAllLanguages == false) {
+        List<String> langVals = [];
+        for (var i = 0; i < myFilteredLanguages.length; i++) {
+          langVals
+              .add(myFilteredLanguages[i].toString().split("(")[0].toString());
         }
-      } else {
+        print("makeMajorWords langVals =$langVals");
+        List<dynamic> languages = List<dynamic>.from(availLanguages
+            .where((dynamic lang) => langVals.contains(lang["name1"]))
+            .toList());
+        print("makeMajorWords got languages =${json.encode(languages)}");
+        languageIds = List<String>.from(
+            languages.map((dynamic lang) => lang["LID"]).toList());
+      }
+      //DEFAULT TO ENGLISH IF TARGET LANGUAGE(APP LANGUAGE) NOT AVAILABLE:
+      String targetLangId = "8";
+      List<dynamic> foundTargetLanguages = List<dynamic>.from(availLanguages
+          .where((dynamic lang) => lang["value"] == targetLanguage)
+          .toList());
+      if (foundTargetLanguages.isNotEmpty) {
+        targetLangId = foundTargetLanguages[0]["LID"];
+      }
+      Map<String, dynamic> body = {
+        "number": lastNumber,
+        "languageIds": languageIds,
+        "isAllLangs": isAllLanguages.toString(),
+        "targetLangId": targetLangId
+      };
+      print("ADD JOINT DATA = ${json.encode(body)}");
+      dynamic data = {"SUCCESS": false};
+      bool isRequestSuccess = true;
+      Response response = http.Response("", 200);
+      try {
+        response = await http.post(
+            Uri.parse(
+                'https://www.learnfactsquick.com/major_words_maker/make_major.php'),
+            body: json.encode(body));
+      } catch (e) {
+        isRequestSuccess = false;
+      }
+      if (isRequestSuccess == false) {
         hideProgress(context);
         showPopup(context, FlutterI18n.translate(context, "NETWORK_ERROR"));
+      } else {
+        //hideProgress(context);
+        if (response.statusCode == 200) {
+          data = Map<String, dynamic>.from(json.decode(response.body));
+          print("GET MAJOR WORDS data = ${json.encode(data)}");
+          if (data["SUCCESS"] == true) {
+            countWords = data["COUNT_WORDS"];
+            int countTotal = data["COUNT_TOTAL"];
+            if (countWords > 0) {
+              gotMajorWords = Map<String, List<dynamic>>.from(data["WORDS"]);
+              List<String> LIDs = gotMajorWords.keys.toList();
+              for (int i = 0; i < LIDs.length; i++) {
+                for (int j = 0; j < gotMajorWords[LIDs[i]]!.length; j++) {
+                  gotMajorWords[LIDs[i]]![j]["formattedWord"] =
+                      formatWord(gotMajorWords[LIDs[i]]![j]["Word"]);
+                }
+              }
+            } else {
+              gotMajorWords = {};
+            }
+            print("GOT MAJOR WORDS NEW = ${json.encode(gotMajorWords)}");
+            hideProgress(context);
+            showInterstitialAd(() {
+              print("NOT SHOWING AD");
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => WordsPageNew(
+                          lastNumber: lastNumber,
+                          words: gotMajorWords,
+                          countWords: countWords,
+                          countTotal: countTotal)));
+              setState(() {});
+            });
+          } else {
+            print("GET MAJOR WORDS ERROR: ${data["ERROR"]}");
+            hideProgress(context);
+            showPopup(context, data["ERROR"]);
+          }
+        } else {
+          hideProgress(context);
+          showPopup(context, FlutterI18n.translate(context, "NETWORK_ERROR"));
+        }
       }
     }
   }
@@ -1160,6 +1183,7 @@ class MyHomeState extends State<MyHome> with WidgetsBindingObserver {
       print("DISPOSING interstitialAd !!!");
       interstitialAd?.dispose();
     }
+    connectivitySubscription.cancel();
   }
 
   // To save data

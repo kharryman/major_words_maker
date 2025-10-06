@@ -50,6 +50,7 @@
     "LANGUAGE_VIETNAMESE": "Vietnamese",
     "LANGUAGE_WELSH": "Welsh",
     "MAKE_MAJOR_WORDS": "Hanga Kupu Nui",
+    "NOT_ONLINE": "Ehara i te ipurangi. ** Ki te hiahia koe ki te whakamahi tuimotu, pawhiria te 'Tangohia nga Panui!' mai i te tahua.",
     "POPUP_NO_ADS_MESSAGE2": "Kia pai te wheako panui-kore i runga i **{mDev}** mo **{mPr}** noa!",
     "POPUP_NO_ADS_TITLE": "Kei te pirangi kaore he whakararuraru?",
     "PROGRESS_MAKE_MAJOR": "Te hanga kupu nui...",
