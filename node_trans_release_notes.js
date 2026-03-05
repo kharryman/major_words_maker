@@ -14,8 +14,9 @@ const pubspec = yaml.parse(yamlFile);
 const fullAppVersion = pubspec.version;
 const  appVersion = fullAppVersion.split("+")[1];
 console.log(`GOT appVersion: ${appVersion}`);
-
-fs.readFile(lastDirSplit.join("/") + "/google_api_key.txt", function (err, apiKey) {
+const googleKeyPath = lastDirSplit.join("/") + "/google_api_key.txt";
+console.log("googleKeyPath = ", googleKeyPath)
+fs.readFile(googleKeyPath, function (err, apiKey) {
     if (err) {
         console.log("ERROR GETTING GOOGLE API KEY: " + JSON.stringify(err));
     } else {

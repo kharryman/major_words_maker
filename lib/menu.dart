@@ -1,4 +1,6 @@
 // ignore_for_file: use_build_context_synchronously, must_be_immutable
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -23,7 +25,7 @@ class MenuState extends State<Menu> {
   late BuildContext mainContext;
   String helpText = "";
   bool isRestoring = false;
-  bool isFeatureRestoreButton = false;
+  bool isFeatureRestoreButton = true;
   ProductDetails? productNoAds;
 
   @override
@@ -358,7 +360,9 @@ class MenuState extends State<Menu> {
                           elevation: 5, // Shadow effect
                         ),
                       ))),
-            if (isFeatureRestoreButton == true)
+            if (isAds == true &&
+                isFeatureRestoreButton == true &&
+                (kIsWeb == true || Platform.isIOS))
               NonDismissingPopupMenuItem(
                   value: "RESTORE_PURCHASES",
                   onTap: () {
