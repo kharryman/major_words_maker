@@ -1,0 +1,13 @@
+Butoane, titlu și meniu îmbunătățite pentru pagina principală.
+
+Funcție de eliminare a reclamelor timp de 24 de ore.
+
+Gestionare offline îmbunătățită.
+
+Biblioteci actualizate. Corecții minore ale pictogramelor și titlurilor pentru utilizare ca aplicație web.
+
+Capacitatea de a afișa cuvinte și definiții în engleză, franceză, germană, italiană și spaniolă.
+
+Cuvintele sunt împărțite în funcție de limba lor sub formă de coloane în tabel.
+
+A fost creată posibilitatea de a elimina reclamele contra ...

@@ -1,0 +1,13 @@
+Melhorias nos botões, título e menu da página inicial.
+
+Recurso para remover anúncios durante 24 horas.
+
+Melhor funcionamento offline.
+
+Bibliotecas atualizadas. Pequenas correções de ícones e títulos para utilização como aplicação web.
+
+Exibição de palavras e definições em inglês, francês, alemão, italiano e espanhol.
+
+As palavras estão organizadas por idioma em colunas na tabela.
+
+Opção para remover anúncios mediante o pagamento de uma pequena taxa.

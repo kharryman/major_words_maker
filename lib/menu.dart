@@ -3,6 +3,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
+import 'package:major_words_maker/globals.dart';
+import 'package:major_words_maker/services/ads.dart';
+import 'package:major_words_maker/services/helpers.dart';
 import 'package:provider/provider.dart';
 import 'main.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
@@ -137,12 +140,11 @@ class MenuState extends State<Menu> {
                 // ignore: unnecessary_null_comparison
 
                 if (kIsWeb == true) {
-                  await MyHomeState()
-                      .showPopup(context, "Can't remove ads on web");
+                  await HelpersService.showPopup(context,
+                      message: "Can't remove ads on web");
                 } else if (productNoAds == null) {
-                  await MyHomeState().showPopup(
-                      context,
-                      FlutterI18n.translate(
+                  await HelpersService.showPopup(context,
+                      message: FlutterI18n.translate(
                           context, "PROMPT_NO_REMOVE_AD_PRODUCT"));
                 } else {
                   ProductDetails finalProductNoAds = productNoAds!;
@@ -234,7 +236,7 @@ class MenuState extends State<Menu> {
                 onPressed: () async {
                   //await Future.delayed(Duration(milliseconds: 400));
                   setState(() {
-                    isAds = false;
+                    Globals.isAds = false;
                     context.read<AppData>().setIsAds(false);
                   });
                   Navigator.of(context).pop();
@@ -251,6 +253,26 @@ class MenuState extends State<Menu> {
         );
       },
     );
+  }
+
+  watchAd() async {
+    debugPrint("watchAd called");
+    bool isWatch = await HelpersService.showConfirm(
+      context,
+      FlutterI18n.translate(context, "ENJOY_NO_ADS_24_HOURS"),
+      FlutterI18n.translate(context, "PROMPT_WATCH_AD"),
+      FlutterI18n.translate(context, "MAYBE_LATER"),
+      "👉 ${FlutterI18n.translate(context, "GO_AD_FREE")}",
+    );
+    debugPrint("watchAd, user selected isWatch = $isWatch");
+    if (isWatch == true) {
+      AdService.showRewardedAd(() async {
+        await AdService.enableAdRemoval();
+        await AdService.setAdsDisabled();
+        setState(() {});
+        debugPrint("Ads disabled for 24 hours");
+      });
+    }
   }
 
   @override
@@ -296,7 +318,7 @@ class MenuState extends State<Menu> {
                     context: context,
                     page: widget.page,
                     updateParent: widget.updateParent)),
-            if (isAds == false)
+            if (Globals.isAds == false)
               PopupMenuItem(
                 value: "NO_ADS",
                 child: Container(
@@ -323,8 +345,49 @@ class MenuState extends State<Menu> {
                     ],
                   ),
                 ),
-              )
-            else if (isAds == true)
+              ),
+            if (Globals.isAds == true)
+              NonDismissingPopupMenuItem<dynamic>(
+                value: 'BUTTON_NO_WATCH_AD',
+                onTap: () {
+                  watchAd();
+                },
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: ElevatedButton.icon(
+                    onPressed: null,
+                    label: Text(
+                      FlutterI18n.translate(
+                        context,
+                        "PROMPT_NO_ADS_24_HOURS",
+                      ),
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.green, // Red text
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white, // White background
+                      foregroundColor: Colors.green, // Red text/icon color
+                      minimumSize: Size(double.infinity, 40),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 2,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        side: const BorderSide(
+                          color: Colors.grey,
+                          width: 2,
+                        ), // Red border
+                      ),
+                      elevation: 5, // Shadow effect
+                    ),
+                  ),
+                ),
+              ),
+            if (Globals.isAds == true)
               NonDismissingPopupMenuItem<dynamic>(
                   value: 'BUTTON_NO_ADS',
                   onTap: () {
@@ -413,6 +476,7 @@ class MenuList extends StatefulWidget {
 }
 
 class MenuListState extends State<MenuList> {
+  bool isShowHelp = false;
   List<dynamic> languages = [];
   @override
   void initState() {
@@ -505,207 +569,238 @@ class MenuListState extends State<MenuList> {
                     ],
                   ),
                 ),
-                Html(data: helpText),
-                Row(
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: Text('0',
-                          textAlign: TextAlign.left,
-                          style: TextStyle(fontWeight: FontWeight.bold)),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 3, 0, 3),
+                  child: FractionallySizedBox(
+                    widthFactor: 0.95, // 80%
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        setState(() {
+                          isShowHelp = !isShowHelp;
+                        });
+                      },
+                      icon: isShowHelp
+                          ? Icon(Icons.visibility_off)
+                          : Icon(Icons.visibility),
+                      label: Text(
+                        isShowHelp
+                            ? FlutterI18n.translate(context, "HIDE_HELP")
+                            : FlutterI18n.translate(context, "SHOW_HELP"),
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            isShowHelp ? Colors.grey : Colors.lightBlueAccent,
+                      ),
                     ),
-                    Expanded(
-                      flex: 2,
-                      child: Text('s,z', textAlign: TextAlign.left),
-                    ),
-                    Expanded(
-                      flex: 11,
-                      child: Text(
-                          FlutterI18n.translate(context, "PROMPT_SOUND_SZ"),
-                          textAlign: TextAlign.left),
-                    ),
-                  ],
+                  ),
                 ),
-                Row(
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: Text('1',
-                          textAlign: TextAlign.left,
-                          style: TextStyle(fontWeight: FontWeight.bold)),
+                if (isShowHelp == true)
+                  Column(children: [
+                    Html(data: helpText),
+                    Row(
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: Text('0',
+                              textAlign: TextAlign.left,
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: Text('s,z', textAlign: TextAlign.left),
+                        ),
+                        Expanded(
+                          flex: 11,
+                          child: Text(
+                              FlutterI18n.translate(context, "PROMPT_SOUND_SZ"),
+                              textAlign: TextAlign.left),
+                        ),
+                      ],
                     ),
-                    Expanded(
-                      flex: 2,
-                      child: Text('d,t,th', textAlign: TextAlign.left),
+                    Row(
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: Text('1',
+                              textAlign: TextAlign.left,
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: Text('d,t,th', textAlign: TextAlign.left),
+                        ),
+                        Expanded(
+                          flex: 11,
+                          child: Text(
+                              FlutterI18n.translate(
+                                  context, "PROMPT_SOUND_DTTH"),
+                              textAlign: TextAlign.left),
+                        )
+                      ],
                     ),
-                    Expanded(
-                      flex: 11,
-                      child: Text(
-                          FlutterI18n.translate(context, "PROMPT_SOUND_DTTH"),
-                          textAlign: TextAlign.left),
-                    )
-                  ],
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: Text('2',
-                          textAlign: TextAlign.left,
-                          style: TextStyle(fontWeight: FontWeight.bold)),
+                    Row(
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: Text('2',
+                              textAlign: TextAlign.left,
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: Text('n', textAlign: TextAlign.left),
+                        ),
+                        Expanded(
+                          flex: 11,
+                          child: Text(
+                              FlutterI18n.translate(context, "PROMPT_SOUND_N"),
+                              textAlign: TextAlign.left),
+                        ),
+                      ],
                     ),
-                    Expanded(
-                      flex: 2,
-                      child: Text('n', textAlign: TextAlign.left),
+                    Row(
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: Text('3',
+                              textAlign: TextAlign.left,
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: Text('m', textAlign: TextAlign.left),
+                        ),
+                        Expanded(
+                          flex: 11,
+                          child: Text(
+                              FlutterI18n.translate(context, "PROMPT_SOUND_M"),
+                              textAlign: TextAlign.left),
+                        ),
+                      ],
                     ),
-                    Expanded(
-                      flex: 11,
-                      child: Text(
-                          FlutterI18n.translate(context, "PROMPT_SOUND_N"),
-                          textAlign: TextAlign.left),
+                    Row(
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: Text('4',
+                              textAlign: TextAlign.left,
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: Text('r', textAlign: TextAlign.left),
+                        ),
+                        Expanded(
+                          flex: 11,
+                          child: Text(
+                              FlutterI18n.translate(context, "PROMPT_SOUND_R"),
+                              textAlign: TextAlign.left),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: Text('3',
-                          textAlign: TextAlign.left,
-                          style: TextStyle(fontWeight: FontWeight.bold)),
+                    Row(
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: Text('5',
+                              textAlign: TextAlign.left,
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: Text('l', textAlign: TextAlign.left),
+                        ),
+                        Expanded(
+                          flex: 11,
+                          child: Text(
+                              FlutterI18n.translate(context, "PROMPT_SOUND_L"),
+                              textAlign: TextAlign.left),
+                        ),
+                      ],
                     ),
-                    Expanded(
-                      flex: 2,
-                      child: Text('m', textAlign: TextAlign.left),
+                    Row(
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: Text('6',
+                              textAlign: TextAlign.left,
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: Text('ch,j,g,sh', textAlign: TextAlign.left),
+                        ),
+                        Expanded(
+                          flex: 11,
+                          child: Text(
+                              FlutterI18n.translate(context, "PROMPT_SOUND_G"),
+                              textAlign: TextAlign.left),
+                        ),
+                      ],
                     ),
-                    Expanded(
-                      flex: 11,
-                      child: Text(
-                          FlutterI18n.translate(context, "PROMPT_SOUND_M"),
-                          textAlign: TextAlign.left),
+                    Row(
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: Text('7',
+                              textAlign: TextAlign.left,
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: Text('c,gg,k,q', textAlign: TextAlign.left),
+                        ),
+                        Expanded(
+                          flex: 11,
+                          child: Text(
+                              FlutterI18n.translate(context, "PROMPT_SOUND_K"),
+                              textAlign: TextAlign.left),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: Text('4',
-                          textAlign: TextAlign.left,
-                          style: TextStyle(fontWeight: FontWeight.bold)),
+                    Row(
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: Text('8',
+                              textAlign: TextAlign.left,
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: Text('f,ph,v', textAlign: TextAlign.left),
+                        ),
+                        Expanded(
+                          flex: 11,
+                          child: Text(
+                              FlutterI18n.translate(
+                                  context, "PROMPT_SOUND_FPHV"),
+                              textAlign: TextAlign.left),
+                        ),
+                      ],
                     ),
-                    Expanded(
-                      flex: 2,
-                      child: Text('r', textAlign: TextAlign.left),
+                    Row(
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: Text('9',
+                              textAlign: TextAlign.left,
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: Text('b,p', textAlign: TextAlign.left),
+                        ),
+                        Expanded(
+                          flex: 11,
+                          child: Text(
+                              FlutterI18n.translate(context, "PROMPT_SOUND_BP"),
+                              textAlign: TextAlign.left),
+                        ),
+                      ],
                     ),
-                    Expanded(
-                      flex: 11,
-                      child: Text(
-                          FlutterI18n.translate(context, "PROMPT_SOUND_R"),
-                          textAlign: TextAlign.left),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: Text('5',
-                          textAlign: TextAlign.left,
-                          style: TextStyle(fontWeight: FontWeight.bold)),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: Text('l', textAlign: TextAlign.left),
-                    ),
-                    Expanded(
-                      flex: 11,
-                      child: Text(
-                          FlutterI18n.translate(context, "PROMPT_SOUND_L"),
-                          textAlign: TextAlign.left),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: Text('6',
-                          textAlign: TextAlign.left,
-                          style: TextStyle(fontWeight: FontWeight.bold)),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: Text('ch,j,g,sh', textAlign: TextAlign.left),
-                    ),
-                    Expanded(
-                      flex: 11,
-                      child: Text(
-                          FlutterI18n.translate(context, "PROMPT_SOUND_G"),
-                          textAlign: TextAlign.left),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: Text('7',
-                          textAlign: TextAlign.left,
-                          style: TextStyle(fontWeight: FontWeight.bold)),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: Text('c,gg,k,q', textAlign: TextAlign.left),
-                    ),
-                    Expanded(
-                      flex: 11,
-                      child: Text(
-                          FlutterI18n.translate(context, "PROMPT_SOUND_K"),
-                          textAlign: TextAlign.left),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: Text('8',
-                          textAlign: TextAlign.left,
-                          style: TextStyle(fontWeight: FontWeight.bold)),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: Text('f,ph,v', textAlign: TextAlign.left),
-                    ),
-                    Expanded(
-                      flex: 11,
-                      child: Text(
-                          FlutterI18n.translate(context, "PROMPT_SOUND_FPHV"),
-                          textAlign: TextAlign.left),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: Text('9',
-                          textAlign: TextAlign.left,
-                          style: TextStyle(fontWeight: FontWeight.bold)),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: Text('b,p', textAlign: TextAlign.left),
-                    ),
-                    Expanded(
-                      flex: 11,
-                      child: Text(
-                          FlutterI18n.translate(context, "PROMPT_SOUND_BP"),
-                          textAlign: TextAlign.left),
-                    ),
-                  ],
-                ),
+                  ]),
               ],
             ),
           );

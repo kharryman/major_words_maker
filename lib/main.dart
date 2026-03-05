@@ -6,21 +6,21 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
 
 //kIsWeb : SIMILIAR TO NOT isApp() FUNCTION====>
 import 'package:flutter/foundation.dart';
 
 //import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_i18n/loaders/decoders/base_decode_strategy.dart';
 import 'package:flutter_i18n/loaders/decoders/json_decode_strategy.dart';
 import 'package:http/http.dart';
 import 'package:major_words_maker/dict_big.dart';
+import 'package:major_words_maker/globals.dart';
 import 'package:major_words_maker/menu.dart';
+import 'package:major_words_maker/services/ads.dart';
+import 'package:major_words_maker/services/helpers.dart';
 import 'package:major_words_maker/words_new.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 //import 'package:list_major_english_words/list_major_english_words.dart';
 //import 'major_english_words.dart';
 import 'package:flutter/services.dart';
@@ -62,7 +62,6 @@ dynamic defaultLanguage = {
   "value": "en"
 };
 String priceNoAds = "\$1";
-bool isAds = true;
 String removeAdsProductId = "remove_ads";
 bool isOnline = true;
 
@@ -154,12 +153,12 @@ class AppData extends ChangeNotifier {
   Future<void> setLanguage(dynamic myLanguage) async {
     selectedLanguage = myLanguage;
     selectedMajorLanguage = selectedLanguage;
-    await MyHomeState().setData("LANGUAGE", selectedLanguage["value"]);
+    await HelpersService.setData("LANGUAGE", selectedLanguage["value"]);
   }
 
   void setIsAds(bool myIsAds) {
     print("AppData setIsAds called myIsAds = $myIsAds");
-    isAds = myIsAds;
+    Globals.isAds = myIsAds;
   }
 
   bool menuOpen = false;
@@ -174,10 +173,7 @@ class MyHome extends StatefulWidget {
 }
 
 class MyHomeState extends State<MyHome> with WidgetsBindingObserver {
-  late BannerAd bannerAd;
-  bool isBannerAdReady = false;
-  String bannerIdAndroid = "ca-app-pub-8514966468184377/3564317476";
-  String bannerIdIos = "ca-app-pub-8514966468184377/1327326512";
+  BannerAd? bannerAd;
 
   final MultiSelectController controllerMultiselect = MultiSelectController();
   var selectedIndex = 0; // ← Add this property.
@@ -348,7 +344,6 @@ class MyHomeState extends State<MyHome> with WidgetsBindingObserver {
     //DEFAULT TO ENGLISH:
     selectedMajorLanguage = languages[6];
     setSavedLanguage(null);
-    
 
     final Connectivity connectivity = Connectivity();
     connectivitySubscription = connectivity.onConnectivityChanged
@@ -367,10 +362,15 @@ class MyHomeState extends State<MyHome> with WidgetsBindingObserver {
           "Main initState Connectivity resolved: result = $result, isOnline = $isOnline");
       doNetworkChange();
     });
-    if (kIsWeb == false && isAds == true) {
-      createInterstitialAd();
-      loadBannerAd();
-    }
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (kIsWeb == false && Globals.isAds == true) {
+        AdService.loadInterstitial();
+        bannerAd = await AdService.createBanner(
+          onLoaded: () => setState(() {}),
+        );
+      }
+    });
   }
 
   doNetworkChange() async {
@@ -389,36 +389,23 @@ class MyHomeState extends State<MyHome> with WidgetsBindingObserver {
       setAvailLanguages();
       if (kIsWeb == false) {
         await initializeInAppPurchase();
+        if (Globals.isAds == true) {
+          AdService.checkAds();
+        }
       }
     }
   }
 
-/*
-  @override
-  void didChangeDependencies() {
-    print("didChangeDependencies called");
-    super.didChangeDependencies();
-    doChangeDependencies();
-    //FlutterI18n.refresh(context,Locale(Provider.of<AppData>(context).selectedLanguage["value"]));
-  }
-
-  doChangeDependencies() {
-    //if (context == null)
-    //BuildContext? context = scaffoldKey.currentContext;
-    //if (context != null) {
-    print("MyHomePageState doChangeDependencies called CONTEXT NOT NULL!");
-    setState(() {
-      resetMyList();
-    });
-  }
-  */
-
   @override
   didChangeAppLifecycleState(AppLifecycleState state) {
+    print("didChangeAppLifecycleState called");
     if (state == AppLifecycleState.resumed) {
       if (kIsWeb == false) {
-        createInterstitialAd();
         //initializeInAppPurchase();
+        if (Globals.isAds == true) {
+          AdService.checkAds();
+        }
+        AdService.loadInterstitial();
       }
     }
   }
@@ -446,10 +433,13 @@ class MyHomeState extends State<MyHome> with WidgetsBindingObserver {
                 "main initializeInAppPurchase $removeAdsProductId ${purchaseRemoveAds.status == PurchaseStatus.purchased ? "PURCHASED" : "RESTORED"}! Setting isAds=FALSE!");
 
             print("main initializeInAppPurchase COMPLETING PURCHASE!");
-            setState(() {
-              disposeAds();
-              isAds = false;
-            });
+            if (Globals.isForceAds == false) {
+              setState(() {
+                bannerAd?.dispose();
+                AdService.disposeAll();
+                Globals.isAds = false;
+              });
+            }
 
             if (purchaseRemoveAds.pendingCompletePurchase) {
               await MenuState().showSuccessThanksBuy();
@@ -467,8 +457,9 @@ class MyHomeState extends State<MyHome> with WidgetsBindingObserver {
                 "main initializeInAppPurchase '$removeAdsProductId' Purchase error: ${purchaseRemoveAds.error}.");
             //if (mounted) {
             //  WidgetsBinding.instance.addPostFrameCallback((_) {
-            await MyHomeState().showPopup(context,
-                "${FlutterI18n.translate(context, "PROMPT_PURCHASING_ERROR")}: ${purchaseRemoveAds.error}");
+            await HelpersService.showPopup(context,
+                message:
+                    "${FlutterI18n.translate(context, "PROMPT_PURCHASING_ERROR")}: ${purchaseRemoveAds.error}");
             // });
             //}
           }
@@ -565,7 +556,8 @@ class MyHomeState extends State<MyHome> with WidgetsBindingObserver {
           //showPopup(context, data["ERROR"]);
         }
       } else {
-        showPopup(context, FlutterI18n.translate(context, "NETWORK_ERROR"));
+        HelpersService.showPopup(context,
+            message: FlutterI18n.translate(context, "NETWORK_ERROR"));
       }
       setState(() {
         isLanguagesLoading = false;
@@ -590,105 +582,6 @@ class MyHomeState extends State<MyHome> with WidgetsBindingObserver {
         myFilteredLanguages = ["English(English)"];
       });
     }
-  }
-
-  Future<void> showPopup(BuildContext context, String message) async {
-    //context ??= scaffoldKey.currentContext!;
-    print("showPopup called");
-    return await showDialog<void>(
-      context: context,
-      barrierDismissible:
-          false, // Prevent dismissing by tapping outside the popup
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(FlutterI18n.translate(context, "ALERT")),
-          content: Text(message),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the popup
-              },
-              child: Text('Close'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Future<void> showConfirm(BuildContext context, String title, String message,
-      String cancelText, String okText, Function callback) async {
-    print("showshowConfirm called");
-    return showDialog<void>(
-      context: context,
-      barrierDismissible:
-          false, // Prevent dismissing by tapping outside the popup
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(title),
-          content: SizedBox(
-              width: MediaQuery.of(context).size.width * 0.70,
-              child: SingleChildScrollView(child: Html(data: message))),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the popup
-              },
-              child: Text(cancelText),
-            ),
-            TextButton(
-              onPressed: () {
-                callback();
-              },
-              child: Text(okText),
-            )
-          ],
-        );
-      },
-    );
-  }
-
-  bool isLoading = false;
-  Future<void> showProgress(BuildContext context, message) async {
-    //hideProgress(context);
-    Completer<void> completer = Completer<void>();
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        completer.complete();
-        return Center(
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white, // Background color
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            padding: EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
-                ),
-                SizedBox(height: 16.0),
-                Text(
-                  message,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18.0,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-    //isShowProgress = true;
-  }
-
-  void hideProgress(BuildContext context) {
-    Navigator.of(context, rootNavigator: true).pop();
-    isLoading = false;
   }
 
   List<dynamic> oldWords = [];
@@ -737,16 +630,18 @@ class MyHomeState extends State<MyHome> with WidgetsBindingObserver {
   void doMakeMajorWords(context, targetLanguage) {
     print("doMakeMajorWords called, targetLanguage = $targetLanguage");
     if (numberController.text.trim() == '') {
-      showPopup(context, FlutterI18n.translate(context, "PROMPT_NO_NUMBERS"));
+      HelpersService.showPopup(context,
+          message: FlutterI18n.translate(context, "PROMPT_NO_NUMBERS"));
       return;
     } else if (myFilteredLanguages.isEmpty) {
-      showPopup(context, FlutterI18n.translate(context, "PROMPT_NO_LANGUAGES"));
+      HelpersService.showPopup(context,
+          message: FlutterI18n.translate(context, "PROMPT_NO_LANGUAGES"));
       return;
     }
     print(
         "doMakeMajorWords myFilteredLanguages.length = ${myFilteredLanguages.length}, myFilteredLanguages[0] = ${myFilteredLanguages[0]}");
 
-    if (isAds == false &&
+    if (Globals.isAds == false &&
         ((targetLanguage == "en" &&
                 myFilteredLanguages.length == 1 &&
                 myFilteredLanguages[0] == "English(English)") ||
@@ -759,9 +654,7 @@ class MyHomeState extends State<MyHome> with WidgetsBindingObserver {
 
   String lastNumber = "";
   Future<void> makeMajorWordsOld(context) async {
-    isLoading = true;
-    //showProgress(context);
-    showProgress(
+    HelpersService.showProgress(
         context, FlutterI18n.translate(context, "PROGRESS_MAKE_MAJOR"));
     await Future.delayed(Duration(milliseconds: 200));
     print("list_english_words length = ${dicWords.length}");
@@ -816,8 +709,8 @@ class MyHomeState extends State<MyHome> with WidgetsBindingObserver {
         "Def": oldWords[i][2],
       });
     }
-    hideProgress(context);
-    showInterstitialAd(() {
+    HelpersService.hideProgress(context);
+    AdService.showInterstitialAd(() {
       print("NOT SHOWING AD");
       Navigator.push(
           context,
@@ -836,13 +729,13 @@ class MyHomeState extends State<MyHome> with WidgetsBindingObserver {
   makeMajorWordsNew(BuildContext context, String targetLanguage) async {
     print("makeMajorWordsNew called targetLanguage = $targetLanguage");
     if (isOnline == false) {
-      showPopup(context, FlutterI18n.translate(context, "NOT_ONLINE"));
+      HelpersService.showPopup(context,
+          message: FlutterI18n.translate(context, "NOT_ONLINE"));
     } else {
       if (numberController.text.trim() == '') {
         return;
       }
-      isLoading = true;
-      showProgress(
+      HelpersService.showProgress(
           context, FlutterI18n.translate(context, "PROGRESS_MAKE_MAJOR"));
       print(numberController.text);
       lastNumber = numberController.text;
@@ -891,8 +784,9 @@ class MyHomeState extends State<MyHome> with WidgetsBindingObserver {
         isRequestSuccess = false;
       }
       if (isRequestSuccess == false) {
-        hideProgress(context);
-        showPopup(context, FlutterI18n.translate(context, "NETWORK_ERROR"));
+        HelpersService.hideProgress(context);
+        HelpersService.showPopup(context,
+            message: FlutterI18n.translate(context, "NETWORK_ERROR"));
       } else {
         //hideProgress(context);
         if (response.statusCode == 200) {
@@ -914,8 +808,8 @@ class MyHomeState extends State<MyHome> with WidgetsBindingObserver {
               gotMajorWords = {};
             }
             print("GOT MAJOR WORDS NEW = ${json.encode(gotMajorWords)}");
-            hideProgress(context);
-            showInterstitialAd(() {
+            HelpersService.hideProgress(context);
+            AdService.showInterstitialAd(() {
               print("NOT SHOWING AD");
               Navigator.push(
                   context,
@@ -929,12 +823,13 @@ class MyHomeState extends State<MyHome> with WidgetsBindingObserver {
             });
           } else {
             print("GET MAJOR WORDS ERROR: ${data["ERROR"]}");
-            hideProgress(context);
-            showPopup(context, data["ERROR"]);
+            HelpersService.hideProgress(context);
+            HelpersService.showPopup(context, message: data["ERROR"]);
           }
         } else {
-          hideProgress(context);
-          showPopup(context, FlutterI18n.translate(context, "NETWORK_ERROR"));
+          HelpersService.hideProgress(context);
+          HelpersService.showPopup(context,
+              message: FlutterI18n.translate(context, "NETWORK_ERROR"));
         }
       }
     }
@@ -1034,7 +929,7 @@ class MyHomeState extends State<MyHome> with WidgetsBindingObserver {
   }
 
   setSavedLanguage(BuildContext? context) async {
-    String savedLanguage = (await getData("LANGUAGE")) ?? "";
+    String savedLanguage = (await HelpersService.getData("LANGUAGE")) ?? "";
     print("savedLanguage = ${json.encode(savedLanguage)}");
     if (savedLanguage != "") {
       selectedMajorLanguage = List<dynamic>.from(languages
@@ -1054,128 +949,6 @@ class MyHomeState extends State<MyHome> with WidgetsBindingObserver {
     //setState((){});
   }
 
-/*
-  @override
-  void didUpdateWidget(covariant MyHomePage oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    FlutterI18n.refresh(context,
-        Locale(Provider.of<AppData>(context).selectedLanguage["value"]));
-  }
-  */
-
-  static final AdRequest request = AdRequest(
-    keywords: <String>[
-      'major system',
-      'memorize numbers',
-      'improve memory',
-      'improve memory of numbers',
-      'words'
-    ],
-    contentUrl: 'https://learnfactsquick.com/#/major_system_generator',
-    nonPersonalizedAds: true,
-  );
-
-  void createInterstitialAd() {
-    print("createInterstitialAd interstitialAd CALLED.");
-    //setState(() {
-    //  isMakeMajor = false;
-    //});
-    var appId = Platform.isAndroid
-        ? 'ca-app-pub-8514966468184377/6907461840'
-        : 'ca-app-pub-8514966468184377/5883541243';
-    print("Using appId: $appId kDebugMode = $kDebugMode");
-    InterstitialAd.load(
-        adUnitId: appId,
-        request: request,
-        adLoadCallback: InterstitialAdLoadCallback(
-          onAdLoaded: (InterstitialAd ad) {
-            print('My InterstitialAd $ad loaded');
-            interstitialAd = ad;
-            numInterstitialLoadAttempts = 0;
-            interstitialAd!.setImmersiveMode(true);
-            print("interstitialAd == null ? : ${interstitialAd == null}");
-            //setState(() {
-            //  isMakeMajor = true;
-            //});
-          },
-          onAdFailedToLoad: (LoadAdError error) {
-            print('interstitialAd failed to load: $error.');
-            numInterstitialLoadAttempts += 1;
-            interstitialAd = null;
-            //setState(() {
-            //  isMakeMajor = false;
-            //});
-            if (numInterstitialLoadAttempts < maxFailedLoadAttempts) {
-              createInterstitialAd();
-            }
-          },
-        ));
-  }
-
-  void showInterstitialAd(Function callback) {
-    print("showInterstitialAd called");
-    if (kIsWeb == true) {
-      print('Web can not show ads.');
-      callback();
-    } else if (isAds == false) {
-      print('isAds FALSE. SHOW NO-ADS WAS PURCHASED!.');
-      callback();
-    } else if (interstitialAd == null) {
-      print('Warning: attempt to show interstitialAd before loaded.');
-      callback();
-    } else {
-      Random random = Random();
-      var isShowAd = (random.nextInt(1000) < MyApp().ofThousandShowAds);
-      if (isShowAd != true) {
-        callback();
-      } else {
-        interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
-          onAdShowedFullScreenContent: (InterstitialAd ad) =>
-              debugPrint('interstitialAd onAdShowedFullScreenContent.'),
-          onAdDismissedFullScreenContent: (InterstitialAd ad) {
-            ad.dispose();
-            createInterstitialAd();
-            callback();
-          },
-          onAdFailedToShowFullScreenContent:
-              (InterstitialAd ad, AdError error) {
-            ad.dispose();
-            createInterstitialAd();
-            callback();
-          },
-        );
-        interstitialAd!.show();
-        interstitialAd = null;
-      }
-    }
-  }
-
-  void loadBannerAd() {
-    String addUnitId = Platform.isAndroid ? bannerIdAndroid : bannerIdIos;
-    bannerAd = BannerAd(
-      adUnitId: addUnitId,
-      size: AdSize.banner,
-      request: AdRequest(),
-      listener: BannerAdListener(
-        onAdLoaded: (_) {
-          setState(() {
-            isBannerAdReady = true;
-          });
-        },
-        onAdFailedToLoad: (ad, error) {
-          print('BannerAd failed to load: $error');
-          ad.dispose();
-        },
-      ),
-    );
-    bannerAd.load();
-  }
-
-  void disposeAds() {
-    interstitialAd?.dispose();
-    bannerAd.dispose();
-  }
-
   @override
   void dispose() {
     super.dispose();
@@ -1184,26 +957,6 @@ class MyHomeState extends State<MyHome> with WidgetsBindingObserver {
       interstitialAd?.dispose();
     }
     connectivitySubscription.cancel();
-  }
-
-  // To save data
-  Future<void> setData(String key, String value) async {
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setString(key, value);
-  }
-
-// To read data
-  Future<String?> getData(String key) async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString(key);
-  }
-
-  isLinkPlayStore() {
-    return (kIsWeb || Platform.isAndroid);
-  }
-
-  isLinkAppStore() {
-    return (kIsWeb || Platform.isIOS);
   }
 
   updateSelf() {
@@ -1253,6 +1006,8 @@ class MyHomeState extends State<MyHome> with WidgetsBindingObserver {
     double screenWidth = MediaQuery.of(context).size.width;
     double tabFontSize =
         (screenWidth * 0.020 + 4) < 15 ? 15 : (screenWidth * 0.020 + 4);
+    double promptFontSize =
+        (screenWidth * 0.016 + 4) < 11 ? 11 : (screenWidth * 0.016 + 4);
     //double promptFontSize = (screenWidth * 0.016 + 4) < 11 ? 11 : (screenWidth * 0.016 + 4);
     var appTitle = FlutterI18n.translate(context, "APP_TITLE");
     //final theme = Theme.of(context); // ← Add this.
@@ -1267,221 +1022,199 @@ class MyHomeState extends State<MyHome> with WidgetsBindingObserver {
     //        .join(", ");
 
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.blueAccent,
-          title: Text(appTitle, style: TextStyle(fontSize: tabFontSize)),
-          actions: <Widget>[
-            Menu(context: context, page: 'main', updateParent: updateSelf)
-          ],
-        ),
-        body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                child: TextField(
-                    controller: numberController,
+      appBar: AppBar(
+        backgroundColor: Colors.blueAccent,
+        title: Text(appTitle, style: TextStyle(fontSize: tabFontSize)),
+        centerTitle: true,
+        actions: <Widget>[
+          Menu(context: context, page: 'main', updateParent: updateSelf)
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+              child: TextField(
+                  controller: numberController,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: FlutterI18n.translate(context, "ENTER_NUMBERS"),
+                  ),
+                  keyboardType: TextInputType.number,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.digitsOnly
+                  ], // Only numbers can be entered
+                  onEditingComplete: () {
+                    //if (Platform.isAndroid) {
+                    //  focusNode.unfocus();
+                    //} else if (Platform.isIOS) {
+                    FocusScope.of(context).unfocus();
+                    //}
+                    doMakeMajorWords(context, selectedMajorLanguage["value"]);
+                  }),
+            ),
+            //Text(json.encode(myFilteredLanguages)),
+            Padding(
+                padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                child: ElevatedButton(
+                  onPressed: () async {
+                    selectAllNoLanguages();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    backgroundColor: isAllLanguages == false
+                        ? Colors.purple[200]
+                        : Colors.grey[700],
+                    minimumSize: Size(75, 25),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                  ),
+                  child: Text(FlutterI18n.translate(
+                      context,
+                      (isAllLanguages == false
+                          ? FlutterI18n.translate(
+                              context, "SELECT_ALL_LANGUAGES")
+                          : FlutterI18n.translate(
+                              context, "SELECT_NO_LANGUAGES")))),
+                )),
+            Padding(
+                padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
+                child: Container(
+                  decoration: BoxDecoration(color: Colors.white),
+                  width: screenWidth - 40,
+                  child: DropDownMultiSelect<String>(
+                    separator: ", ",
                     decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: FlutterI18n.translate(context, "ENTER_NUMBERS"),
+                      labelText: "",
+                      labelStyle: commonTextStyle,
                     ),
-                    keyboardType: TextInputType.number,
-                    inputFormatters: <TextInputFormatter>[
-                      FilteringTextInputFormatter.digitsOnly
-                    ], // Only numbers can be entered
-                    onEditingComplete: () {
-                      //if (Platform.isAndroid) {
-                      //  focusNode.unfocus();
-                      //} else if (Platform.isIOS) {
-                      FocusScope.of(context).unfocus();
-                      //}
-                      doMakeMajorWords(context, selectedMajorLanguage["value"]);
-                    }),
-              ),
-              //Text(json.encode(myFilteredLanguages)),
-              Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      selectAllNoLanguages();
+                    isDense: true,
+                    onChanged: (List<String> newList) {
+                      setState(() {
+                        setLanguages(context, newList);
+                      });
                     },
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor: Colors.white,
-                      backgroundColor: isAllLanguages == false
-                          ? Colors.purple[200]
-                          : Colors.grey[700],
-                      minimumSize: Size(75, 25),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                    ),
-                    child: Text(FlutterI18n.translate(
+                    options: myList,
+                    selectedValues: myFilteredLanguages,
+                    whenEmpty:
+                        FlutterI18n.translate(context, "SELECT_LANGUAGES"),
+                  ),
+                )),
+            SizedBox(height: 20),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 10.0),
+                child: HelpersService.customButton(
+                    context,
+                    0.90,
+                    promptFontSize,
+                    FlutterI18n.translate(context, "MAKE_MAJOR_WORDS"),
+                    Icon(Icons.construction),
+                    Colors.green,
+                    Colors.black,
+                    5, () async {
+                  focusNode.unfocus();
+                  FocusScope.of(context).unfocus();
+                  print("Delayed action executed!");
+                  doMakeMajorWords(context, selectedMajorLanguage["value"]);
+                }),
+              ),
+            ),
+
+            SizedBox(height: 30),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 15.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      textAlign: TextAlign.left,
+                      FlutterI18n.translate(
                         context,
-                        (isAllLanguages == false
-                            ? FlutterI18n.translate(
-                                context, "SELECT_ALL_LANGUAGES")
-                            : FlutterI18n.translate(
-                                context, "SELECT_NO_LANGUAGES")))),
-                  )),
-              Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-                  child: Container(
-                    decoration: BoxDecoration(color: Colors.white),
-                    width: screenWidth - 40,
-                    child: DropDownMultiSelect<String>(
-                      separator: ", ",
-                      decoration: InputDecoration(
-                        labelText: "",
-                        labelStyle: commonTextStyle,
+                        "SEE_LFQ_WEBSITE_OTHER_APPS",
                       ),
-                      isDense: true,
-                      onChanged: (List<String> newList) {
-                        setState(() {
-                          setLanguages(context, newList);
-                        });
-                      },
-                      options: myList,
-                      selectedValues: myFilteredLanguages,
-                      whenEmpty:
-                          FlutterI18n.translate(context, "SELECT_LANGUAGES"),
-                    ),
-                  )),
-              Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      //if (Platform.isAndroid) {
-                      focusNode.unfocus();
-                      //} else if (Platform.isIOS) {
-                      FocusScope.of(context).unfocus();
-                      //}
-                      //await Future.delayed(Duration(seconds: 1), () {
-                      // Code to be executed after the delay
-                      print("Delayed action executed!");
-                      doMakeMajorWords(context, selectedMajorLanguage["value"]);
-                      //});
-                    },
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor: Colors.white,
-                      backgroundColor: Colors.green,
-                      minimumSize: Size(100, 50),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5),
+                      style: TextStyle(
+                        fontStyle: FontStyle.italic,
+                        fontSize: promptFontSize,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue[800],
                       ),
                     ),
-                    child: Text(
-                        FlutterI18n.translate(context, "MAKE_MAJOR_WORDS")),
-                  )),
-              Padding(
-                padding: EdgeInsets.all(10.0),
-                child: SizedBox(
-                    width: 275,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // Add your button's functionality here
-                        launch('https://learnfactsquick.com');
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color.fromARGB(255, 204, 159,
-                            252), // Change the button's background color
-                        foregroundColor: Colors.white, // Change the text color
+                    HelpersService.customButton(
+                      context,
+                      0.85,
+                      promptFontSize,
+                      FlutterI18n.translate(
+                        context,
+                        "PROMPT_TOOLS_WEBSITE",
                       ),
-                      child: Wrap(
-                        alignment: WrapAlignment.spaceBetween,
-                        children: <Widget>[
-                          Image.asset(
-                            'assets/images/lfq_icon.png', // Path to your image asset
-                            width: 25, // Set the desired width
-                            height: 25, // Set the desired height
+                      Image.asset(
+                        'assets/images/lfq_icon.png',
+                        width: 20,
+                        height: 20,
+                      ),
+                      Color.fromARGB(255, 204, 159, 252),
+                      Colors.white,
+                      15,
+                      () => launch('https://learnfactsquick.com'),
+                    ),
+                    if (HelpersService.isLinkPlayStore())
+                      Padding(
+                        padding: const EdgeInsets.only(top: 15.0),
+                        child: HelpersService.customButton(
+                          context,
+                          0.85,
+                          promptFontSize,
+                          FlutterI18n.translate(
+                            context,
+                            "PROMPT_APPS_PLAY_STORE",
                           ),
-                          SizedBox(width: 8),
-                          Text(
-                              FlutterI18n.translate(
-                                  context, "PROMPT_TOOLS_WEBSITE"),
-                              style: TextStyle(fontSize: 10)), // Text
-                        ],
+                          Icon(Icons.play_circle_fill),
+                          Colors.green,
+                          Colors.white,
+                          15,
+                          () => launch(
+                            'https://play.google.com/store/apps/dev?id=5263177578338103821',
+                          ),
+                        ),
                       ),
-                    )),
-              ),
-              Visibility(
-                visible: isLinkPlayStore(),
-                child: Padding(
-                  padding: EdgeInsets.all(10.0),
-                  child: SizedBox(
-                      width: 275,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          // Add your button's functionality here
-                          launch(
-                              'https://play.google.com/store/apps/dev?id=5263177578338103821');
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors
-                              .green, // Change the button's background color
-                          foregroundColor:
-                              Colors.white, // Change the text color
+                    if (HelpersService.isLinkAppStore())
+                      Padding(
+                        padding: const EdgeInsets.only(top: 15.0),
+                        child: HelpersService.customButton(
+                          context,
+                          0.85,
+                          promptFontSize,
+                          FlutterI18n.translate(
+                            context,
+                            "PROMPT_APPS_APP_STORE",
+                          ),
+                          Icon(Icons.download_sharp),
+                          Colors.blue,
+                          Colors.white,
+                          15,
+                          () => launch(
+                            'https://apps.apple.com/us/developer/keith-harryman/id1693739510',
+                          ),
                         ),
-                        child: Wrap(
-                          alignment: WrapAlignment.spaceBetween,
-                          children: <Widget>[
-                            Icon(Icons.play_circle_fill), // Google Play icon
-                            SizedBox(
-                                width:
-                                    8), // Add some space between the icon and text
-                            Text(
-                                FlutterI18n.translate(
-                                    context, "PROMPT_APPS_PLAY_STORE"),
-                                style: TextStyle(fontSize: 10)), // Text
-                          ],
-                        ),
-                      )),
+                      ),
+                  ],
                 ),
               ),
-              Visibility(
-                visible: isLinkAppStore(),
-                child: Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: SizedBox(
-                        width: 275,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            // Add your button's functionality here
-                            launch(
-                                'https://apps.apple.com/us/developer/keith-harryman/id1693739510');
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors
-                                .blue, // Change the button's background color
-                            foregroundColor:
-                                Colors.white, // Change the text color
-                          ),
-                          child: Wrap(
-                            alignment: WrapAlignment.spaceBetween,
-                            children: <Widget>[
-                              Icon(Icons.download_sharp), // Google Play icon
-                              SizedBox(
-                                  width:
-                                      8), // Add some space between the icon and text
-                              Text(
-                                  FlutterI18n.translate(
-                                      context, "PROMPT_APPS_APP_STORE"),
-                                  style: TextStyle(fontSize: 10)), // Text
-                            ],
-                          ),
-                        ))),
-              ),
-            ],
-          ),
+            ),
+            SizedBox(height: 10),
+          ],
         ),
-        bottomNavigationBar: (isAds == true && isBannerAdReady)
-            ? Container(
-                color: Colors.white,
-                width: bannerAd.size.width.toDouble(),
-                height: bannerAd.size.height.toDouble(),
-                child: AdWidget(ad: bannerAd),
-              )
-            : null);
+      ),
+      bottomNavigationBar:
+          Globals.isAds ? AdService.bottomBanner(bannerAd: bannerAd) : null,
+    );
   }
 }
 

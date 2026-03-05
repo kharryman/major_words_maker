@@ -1,0 +1,8 @@
+Tombol halaman depan, judul, dan menu yang lebih baik.
+
+Fitur untuk menghapus iklan selama 24 jam.
+Penanganan offline yang lebih baik.
+Pustaka yang diperbarui. Perbaikan kecil pada ikon dan judul untuk penggunaan sebagai aplikasi web.
+Mampu menampilkan kata dan definisi dalam bahasa Inggris, Prancis, Jerman, Italia, dan Spanyol.
+Kata-kata tersebut dibagi berdasarkan bahasanya sebagai kolom pada tabel.
+Dibuat kemampuan untuk menghapus iklan dengan biaya kecil.

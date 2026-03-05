@@ -1,0 +1,7 @@
+Verbesserte Startseiten-Buttons, Titel und Menü.
+Funktion zum Ausblenden von Werbung für 24 Stunden.
+Verbesserte Offline-Funktionalität.
+Aktualisierte Bibliotheken. Kleinere Korrekturen an Symbolen und Titel für die Nutzung als Web-App.
+Anzeige von Wörtern und Definitionen in Englisch, Französisch, Deutsch, Italienisch und Spanisch möglich.
+Die Wörter sind in Tabellenspalten nach Sprache unterteilt.
+Option zum Entfernen von Werbung gegen eine geringe Gebühr hinzugefügt.
