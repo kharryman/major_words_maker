@@ -1,0 +1,13 @@
+Amélioration des boutons, du titre et du menu de la page d'accueil.
+
+Fonctionnalité permettant de supprimer les publicités pendant 24 heures.
+
+Gestion hors ligne améliorée.
+
+Bibliothèques mises à jour. Corrections mineures des icônes et du titre pour une utilisation en tant qu'application web.
+
+Affichage des mots et définitions en anglais, français, allemand, italien et espagnol.
+
+Les mots sont classés par langue dans les colonnes du tableau.
+
+Possibilité de supprimer les publicités moyennant...

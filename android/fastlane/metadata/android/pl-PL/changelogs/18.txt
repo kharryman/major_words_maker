@@ -1,0 +1,7 @@
+Lepsze przyciski na stronie głównej, tytuł i menu.
+Funkcja usuwania reklam na 24 godziny.
+Lepsza obsługa trybu offline.
+Zaktualizowane biblioteki. Drobne poprawki ikon i tytułów do użytku w aplikacji internetowej.
+Możliwość wyświetlania słów i definicji w języku angielskim, francuskim, niemieckim, włoskim i hiszpańskim.
+Słowa są podzielone według języka w kolumnach w tabeli.
+Dodano możliwość usuwania reklam za niewielką opłatą.

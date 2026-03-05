@@ -1,0 +1,5 @@
+Pengendalian luar talian yang lebih baik.
+Perpustakaan dikemas kini. Ikon kecil dan pembetulan tajuk untuk digunakan sebagai apl web.
+Dapat menunjukkan perkataan dan definisi dalam bahasa Inggeris, Perancis, Jerman, Itali dan Sepanyol.
+Perkataan dibahagikan mengikut bahasanya sebagai lajur di atas meja.
+Keupayaan mencipta untuk mengalih keluar iklan dengan bayaran yang kecil.

@@ -1,0 +1,5 @@
+Mejor manejo sin conexión.
+Bibliotecas actualizadas. Correcciones menores en iconos y títulos para su uso como aplicación web.
+Se pueden mostrar palabras y definiciones en inglés, francés, alemán, italiano y español.
+Las palabras se dividen por idioma en columnas en la tabla.
+Se ha creado la posibilidad de eliminar anuncios por una pequeña tarifa.

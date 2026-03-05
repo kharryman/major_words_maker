@@ -1,0 +1,1 @@
+Lepšia manipulácia offline. Aktualizované knižnice. Drobné opravy ikon a názvov pre použitie ako webovej aplikácie. Možnosť zobrazenia slov a definícií v angličtine, francúzštine, nemčine, taliančine a španielčine. Slová sú v tabuľke rozdelené podľa jazyka ako stĺpce. Vytvorená možnosť odstránenia reklám za malý poplatok.

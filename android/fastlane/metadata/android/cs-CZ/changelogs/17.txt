@@ -1,0 +1,1 @@
+Lepší práce offline. Aktualizované knihovny. Drobné opravy ikon a názvů pro použití jako webové aplikace. Možnost zobrazení slov a definic v angličtině, francouzštině, němčině, italštině a španělštině. Slova jsou v tabulce rozdělena podle jazyka jako sloupce. Vytvořena možnost odstraňování reklam za malý poplatek.

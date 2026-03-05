@@ -1,0 +1,10 @@
+Paremmat etusivun painikkeet, otsikko ja valikko.
+
+Mainosten poistamiseen 24 tunniksi tarkoitettu toiminto.
+
+Parempi offline-käyttö.
+Päivitetyt kirjastot. Pieniä kuvake- ja otsikkokorjauksia verkkosovelluksen käyttöä varten.
+Sanat ja määritelmät voidaan näyttää englanniksi, ranskaksi, saksaksi, italiaksi ja espanjaksi.
+Sanat on jaettu kielen mukaan sarakkeiksi taulukossa.
+
+Mainosten poistamiseen on lisätty mahdollisuus pientä maksua vastaan.

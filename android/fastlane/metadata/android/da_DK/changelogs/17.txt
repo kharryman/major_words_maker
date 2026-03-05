@@ -1,0 +1,1 @@
+Bedre offlinehåndtering. Opdaterede biblioteker. Mindre rettelser til ikoner og titler til brug som webapp. Mulighed for at vise ord og definitioner på engelsk, fransk, tysk, italiensk og spansk. Ordene er opdelt efter deres sprog som kolonner i tabellen. Mulighed for at fjerne annoncer mod et mindre gebyr.

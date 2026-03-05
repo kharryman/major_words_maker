@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:major_words_maker/menu.dart';
+import 'package:major_words_maker/services/ads.dart';
 import 'main.dart';
 
 // ignore: must_be_immutable
@@ -71,6 +72,7 @@ class WordsPageNewState extends State<WordsPageNew> {
         FlutterI18n.translate(context, "PROMPT_MAJOR_WORDS"),
         style: TextStyle(fontSize: titleFontSize),
       ),
+      centerTitle: true,
       actions: <Widget>[
         Menu(context: context, page: 'main', updateParent: updateSelf)
       ],
@@ -257,8 +259,10 @@ class WordsPageNewState extends State<WordsPageNew> {
     return WillPopScope(
         onWillPop: () async {
           print("HOME PAGE GOING BACK TO MY APP!");
-          Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => MyApp()));
+          AdService.showInterstitialAd(() {
+            Navigator.pushReplacement(
+                context, MaterialPageRoute(builder: (context) => MyApp()));
+          });
           return true; // Return false to prevent popping the route
         },
         child: Scaffold(

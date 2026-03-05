@@ -1,0 +1,12 @@
+Jobb főoldali gombok, cím és menü.
+
+Funkció a hirdetések 24 órás eltávolítására.
+
+Jobb offline kezelés.
+
+Frissített könyvtárak. Kisebb ikon- és címjavítások webes alkalmazásként való használathoz.
+
+Szavak és definíciók megjelenítése angol, francia, német, olasz és spanyol nyelven.
+A szavak nyelvük szerint oszlopokban jelennek meg a táblázatban.
+
+Létrehoztuk a hirdetéseltávolítás lehetőségét kis díj ellenében.

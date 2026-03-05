@@ -1,0 +1,5 @@
+Lepsza obsługa offline.
+Zaktualizowane biblioteki. Drobne poprawki ikon i tytułów do użytku w aplikacji internetowej.
+Możliwość wyświetlania słów i definicji w języku angielskim, francuskim, niemieckim, włoskim i hiszpańskim.
+Słowa są podzielone według języka w kolumnach tabeli.
+Dodano możliwość usuwania reklam za niewielką opłatą.

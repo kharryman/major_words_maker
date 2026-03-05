@@ -1,3 +1,5 @@
+CALL taskkill /F /IM java.exe /T
+CALL taskkill /F /IM gradle.exe /T
 CALL flutter clean
 CALL flutter pub get
 CALL copy /y ..\flutter_key.properties .\android

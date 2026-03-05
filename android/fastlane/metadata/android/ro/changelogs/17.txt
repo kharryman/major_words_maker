@@ -1,0 +1,8 @@
+Gestionare offline îmbunătățită.
+
+Biblioteci actualizate. Corecții minore ale pictogramelor și titlurilor pentru utilizare ca aplicație web.
+
+Posibilitatea de a afișa cuvinte și definiții în engleză, franceză, germană, italiană și spaniolă.
+
+Cuvintele sunt împărțite în funcție de limba lor sub formă de coloane în tabel.
+Crearea posibilității de a elimina reclamele contra unei taxe mici.

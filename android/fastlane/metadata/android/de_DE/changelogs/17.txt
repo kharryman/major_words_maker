@@ -1,0 +1,5 @@
+Verbesserte Offline-Verarbeitung.
+Aktualisierte Bibliotheken. Kleinere Symbol- und Titelkorrekturen für die Nutzung als Web-App.
+Wörter und Definitionen können nun in Englisch, Französisch, Deutsch, Italienisch und Spanisch angezeigt werden.
+Die Wörter werden in der Tabelle nach Sprachen als Spalten unterteilt.
+Die Möglichkeit, Werbung gegen eine geringe Gebühr zu entfernen, wurde geschaffen.

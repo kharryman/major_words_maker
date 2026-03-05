@@ -1,0 +1,5 @@
+Better offline handling.
+Updated libraries. Minor icon and title fixes for use as web-app.
+Able to show words and definitions in English, French, German, Italian, and Spanish.
+The words are divided by their language as columns on the table.
+Created ability to remove ads for a small fee.

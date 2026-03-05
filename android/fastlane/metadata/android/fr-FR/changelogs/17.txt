@@ -1,0 +1,8 @@
+Meilleure gestion hors ligne.
+
+Bibliothèques mises à jour. Corrections mineures des icônes et du titre pour une utilisation en tant qu'application web.
+
+Affichage des mots et définitions en anglais, français, allemand, italien et espagnol.
+Les mots sont classés par langue sous forme de colonnes dans le tableau.
+
+Suppression des publicités moyennant une petite participation.

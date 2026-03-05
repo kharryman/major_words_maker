@@ -1,0 +1,7 @@
+Butang, tajuk dan menu halaman hadapan yang lebih baik.
+Ciri untuk mengalih keluar iklan selama 24 jam.
+Pengendalian luar talian yang lebih baik.
+Pustaka yang dikemas kini. Pembetulan ikon dan tajuk kecil untuk digunakan sebagai aplikasi web.
+Mampu menunjukkan perkataan dan definisi dalam bahasa Inggeris, Perancis, Jerman, Itali dan Sepanyol.
+Perkataan dibahagikan mengikut bahasa mereka sebagai lajur di atas jadual.
+Keupayaan untuk mengalih keluar iklan dengan bayaran yang kecil telah dicipta.
